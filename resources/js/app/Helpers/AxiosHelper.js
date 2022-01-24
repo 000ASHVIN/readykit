@@ -1,7 +1,7 @@
 import AxiosFunction from "../../core/helpers/axios/AxiosFunction";
 import AppFunction from '../../core/helpers/app/AppFunction'
 
-export const urlGenerator = url => `${AppFunction.getBaseUrl()}/${url.split('/').filter(d => d).join('/')}`;
+export const urlGenerator = url => `${AppFunction.getBaseUrl()}/${(url || '').split('/').filter(d => d).join('/')}`;
 
 export const axiosGet = (url, data = null) => {
     return AxiosFunction.axiosGet(urlGenerator(url), data);
