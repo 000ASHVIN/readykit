@@ -68,3 +68,15 @@ Vue.component('task-add-edit-modal', require('./Components/Views/Demo/Pages/kanb
 // Demo Crud
 Vue.component('app-demo-crud', require('./Components/Views/Demo/Tables/demo-crud/Index').default);
 Vue.component('app-add-modal', require('./Components/Views/Demo/Tables/demo-crud/AddModal').default);
+
+//all Admin readykit pages
+Vue.component('admin-users', require('./Components/Views/Admin/User/Users').default);
+Vue.component('admin-user-edit', require('./Components/Views/Admin/User/EditUser').default);
+Vue.component('admin-user-create', require('./Components/Views/Admin/User/CreateUser').default);
+
+Vue.component('admin-branches', require('./Components/Views/Admin/Branch/Branches').default);
+Vue.component('admin-branch-edit', require('./Components/Views/Admin/Branch/EditBranch').default);
+Vue.component('admin-branch-create', require('./Components/Views/Admin/Branch/CreateBranch').default);
+
+Vue.component('user-create-reading', require('./Components/Views/User/WaterTankReading/CreateReading').default);
+

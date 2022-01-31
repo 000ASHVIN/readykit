@@ -22,6 +22,19 @@ class User extends BaseUser implements HasLocalePreference
     protected static $logAttributes = [
         'first_name', 'last_name', 'email'
     ];
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'temp_password',
+        'branch_id',
+        'created_by',
+        'status_id',
+        'invitation_token',
+        'remember_token',
+        'last_login_at'
+    ];
 
     use UserAttribute,
         UserMethod,

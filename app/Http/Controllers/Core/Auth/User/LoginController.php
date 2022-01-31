@@ -37,6 +37,9 @@ class LoginController extends Controller
     {
         try {
             $this->service->login();
+            if(auth()->user()->roles()->first()->is_admin){
+                return route('admin.users.index');
+            }
             // custom hook
             $route = CustomRoute::new(true)->handle();
             $route = count($route) ? $route : home_route();

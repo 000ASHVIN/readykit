@@ -29,7 +29,7 @@ mix.setPublicPath('public')
         'lodash'
     ])
     .sourceMaps();
-
+mix.webpackConfig({ node: { fs: 'empty' }})
 if (mix.inProduction()) {
     mix.version()
         .options({

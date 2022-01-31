@@ -1,5 +1,44 @@
 <template>
-  <nav class="sidebar sidebar-offcanvas" id="sidebar">
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo" :href="logoUrl">
+        <img :src="logoSrc" alt="logo"/>
+      </a>
+      <a class="navbar-brand brand-logo-mini" :href="logoUrl">
+        <img :src="logoIconSrc" alt="logo"/>
+      </a>
+    </div>
+
+    <ul class="nav nav-scrolling">
+
+      <li class="nav-item" v-for="(item, index) in data" :key="index" >
+        <a class="nav-link"
+           :href="item.id ? '#'+item.id : item.url"
+           :data-toggle="item.id ? 'collapse' : false"
+           :aria-expanded="item.id ? 'false' : false"
+           :aria-controls="item.id ? item.id : false">
+                    <span class="icon-wrapper">
+                        <app-icon :name="item.icon" class="menu-icon"/>
+                    </span>
+          <span class="menu-title">{{ item.name }}</span>
+          <i v-if="item.subMenu" class="menu-arrow"/>
+        </a>
+
+        <div class="collapse" v-if="item.subMenu" :id="item.id">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"
+                v-for="(submenuItem, index) in item.subMenu"
+                :key="index">
+              <a class="nav-link" :href="submenuItem.url">
+                {{ submenuItem.name }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </nav> 
+   <!-- <nav class="sidebar sidebar-offcanvas" id="sidebar"> 
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
       <a class="navbar-brand brand-logo" :href="logoUrl">
         <img :src="logoSrc" alt="logo"/>
@@ -38,7 +77,7 @@
         </div>
       </li>
     </ul>
-  </nav>
+  </nav>  -->
 </template>
 
 <script>
