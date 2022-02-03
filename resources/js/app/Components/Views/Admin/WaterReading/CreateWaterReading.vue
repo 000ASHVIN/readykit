@@ -5,10 +5,33 @@
         
         <div class="card card-with-shadow border-0 h-100">
           <div class="card-header p-primary bg-transparent">
-            <h5 class="card-title m-0">Add Reading</h5>
+            <h5 class="card-title m-0">Create Reading</h5>
           </div>
           <div class="card-body">
-            <form id="create-reading-form" method="post" action="/create-reading" enctype="multipart/form-data" class="mb-0">
+            <form id="create-reading-form" method="post" action="/admin/water_readings/create" enctype="multipart/form-data" class="mb-0">
+              <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> User </label>
+                <div class="col-md-8">
+                  <select
+                    id="inputs_status"
+                    class="custom-select"
+                    style="
+                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
+                    "
+                    name="user_id"
+                    v-model="selected_user_id"
+                    v-on:change="selectUser(selected_user_id)"
+                  >
+                    <option value="" selected>Select User</option>
+                    <option :value="user.id" v-for="user in users" :key="user.id">{{ user.full_name }}</option>
+                  </select>
+                  <div>
+                    <small class="text-danger validation-error" v-if="this.error.user">
+                      {{ this.error.user }}
+                    </small>
+                  </div>
+                </div>
+              </div>
               <div class="form-group row align-items-center">
                 <label class="col-md-2 mb-md-0"> Current Branch </label>
                 <div class="col-md-8">
@@ -23,7 +46,7 @@
                   <input
                     type="text"
                     name="branch"
-                    :placeholder="branch_data.name"
+                    :placeholder="(branch_data.name) ? branch_data.name :'{autofill based on selected user.}'"
                     autocomplete="off"
                     class="form-control"
                     disabled
@@ -170,16 +193,13 @@
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
 export default {
   name: "CreateReading",
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
   mixins: [FormMixin],
   components: {},
   data() {
     return {
+      users:[],
+      selected_user:[],
+      selected_user_id:'',
       branch_data: [],
       house_lot_data: [],
       branch: "",
@@ -189,6 +209,7 @@ export default {
       current_reading: "",
       // meter_picture: "",
       error: {
+        user:"",
         branch: "",
         serial_no: "",
         house_lot_no: "",
@@ -204,6 +225,7 @@ export default {
       }
     },
     clearErrors() {
+      this.error.user = "";
       this.error.branch = "";
       this.error.serial_no = "";
       this.error.house_lot_no = "";
@@ -212,6 +234,10 @@ export default {
     },
     checkValidation() {
       let is_error = false;
+      if (this.selected_user_id == "" && !this.selected_user_id) {
+        is_error = true;
+        this.error.user = "User is required";
+      }
       if (this.branch == "" && !this.branch) {
         is_error = true;
         this.error.branch = "Branch is required";
@@ -242,6 +268,7 @@ export default {
       return false;
     },
     getBranch(id) {
+      // console.log(id);
       this.axiosGet("/get-branch/" + id)
         .then((response) => {
           if (response.data) {
@@ -250,6 +277,8 @@ export default {
           }
         })
         .catch(({ response }) => {
+          this.branch_data = [];
+          this.branch = '';
           console.log(response);
         });
     },
@@ -269,10 +298,33 @@ export default {
         this.house_lot_no = '';
         // console.log(response);
       });
+    },
+    getUsers() {
+      this.axiosGet("/admin/get-users")
+        .then((response) => {
+          this.users = response.data;
+        })
+        .catch(({ response }) => {
+          console.log(response);
+        });
+    },
+    selectUser(id){
+      this.axiosGet("/admin/get-user/"+id)
+        .then((response) => {
+          this.selected_user = response.data;
+          // alert(this.selected_use)
+          this.getBranch(this.selected_user.branch_id);
+        })
+        .catch(({ response }) => {
+          this.branch_data = [];
+          this.branch = '';
+          console.log(response);
+        });
     }
   },
   created() {
-    this.getBranch(this.user.branch_id);
+    // this.getBranch(this.user.branch_id);
+    this.getUsers();
   },
 };
 </script>

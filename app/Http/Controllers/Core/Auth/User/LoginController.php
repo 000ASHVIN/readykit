@@ -40,13 +40,14 @@ class LoginController extends Controller
             if(auth()->user()->roles()->first()->is_admin){
                 return route('admin.users.index');
             }
+            return route('user.water-tank.reading');
             // custom hook
-            $route = CustomRoute::new(true)->handle();
-            $route = count($route) ? $route : home_route();
-            return route(
-                $route['route_name'],
-                $route['route_params']
-            );
+            // $route = CustomRoute::new(true)->handle();
+            // $route = count($route) ? $route : home_route();
+            // return route(
+            //     $route['route_name'],
+            //     $route['route_params']
+            // );
         } catch (\Exception $exception) {
             return response()->json([
                 'message' => $exception instanceof ModelNotFoundException ? trans('default.resource_not_found', ['resource' => trans('default.user')]) : $exception->getMessage()

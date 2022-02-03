@@ -109,6 +109,27 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> Branch </label>
+                <div class="col-md-8">
+                  <select
+                    id="inputs_status"
+                    class="custom-select"
+                    style="
+                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
+                    "
+                    v-model="branch"
+                  >
+                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name}}</option>
+                    
+                  </select>
+                  <div>
+                    <small class="text-danger validation-error" v-if="this.error.branch">
+                      {{ this.error.branch }}
+                    </small>
+                  </div>
+                </div>
+              </div>
               <div class="mt-5 action-buttons">
                 <a @click="updateUser" class="btn btn-primary mr-2">
                   Update
@@ -137,17 +158,20 @@ export default {
   data() {
     return {
         id:'',
+        branch:'',
         first_name:'',
         last_name:'',
         email:'',
         temp_password:"",
         status:'',
+        branches:[],
         error:{
           first_name:'',
           last_name:'',
           email:'',
           temp_password:'',
-          status:''
+          status:'',
+          branch:''
         }
     };
   },
@@ -158,6 +182,7 @@ export default {
         this.error.email ='';
         this.error.temp_password ='';
         this.error.status ='';
+        this.error.branch ='';
       },
       setUser(){
           this.id=this.user.id;
@@ -166,6 +191,7 @@ export default {
           this.email=this.user.email;
           this.temp_password=this.user.temp_password;
           this.status=this.user.status_id;
+          this.branch=this.user.branch_id;
       },
       checkValidation(){
         let is_error = false;
@@ -184,6 +210,10 @@ export default {
         if(this.status == "" && !this.status){
           is_error = true;
           this.error.status = "Status is required";
+        }
+        if(this.branch == "" && !this.branch){
+          is_error = true;
+          this.error.branch = "Branch is required";
         }
         // if(this.temp_password.length > 30 ){
         //   is_error = true;
@@ -204,7 +234,8 @@ export default {
         last_name:this.last_name,
         email:this.email,
         temp_password:this.temp_password,
-        status_id:this.status
+        status_id:this.status,
+        branch_id:this.branch
         }
         this.axiosPost({url,data:payload})
         .then((response) => {
@@ -234,13 +265,26 @@ export default {
             if(response.data.errors.status_id){
               this.$toastr.e(response.data.errors.status_id);
             }
+            if(response.data.errors.branch_id){
+              this.$toastr.e(response.data.errors.branch_id);
+            }
             
           }
+        });
+      },
+      getBranches(){
+        this.axiosGet("/admin/get-branches")
+        .then((response) => {
+          this.branches = response.data;
+        })
+        .catch(({ response }) => {
+          console.log(response);
         });
       }
   },
   created() {
       this.setUser();
+      this.getBranches();
   },
 };
 </script>

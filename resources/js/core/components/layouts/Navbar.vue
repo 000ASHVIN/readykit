@@ -64,12 +64,12 @@
                             </a>
                         </li>
 
-                        <app-navbar-language-dropdown
+                        <!-- <app-navbar-language-dropdown
                             :selected-language="selectedLanguage"
                             :data="languageData"
-                        />
+                        /> -->
 
-                        <component
+                        <!-- <component
                             :is="notificationComponent"
                             :all-notification-url="allNotificationUrl"
                             :data="notificationData"
@@ -77,7 +77,7 @@
                             :total-unread="totalUnread"
                             @clicked="sendNotification"
                             @loadNotifications="$emit('loadNotifications')"
-                        />
+                        /> -->
 
                         <span class="topbar-divider d-none d-sm-block"/>
 

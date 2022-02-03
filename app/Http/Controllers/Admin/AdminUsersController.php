@@ -15,6 +15,10 @@ class AdminUsersController extends Controller
         return view('admin.users.index');
     }
 
+    public function getUser($id){
+        return json_encode(User::find($id));
+    }
+
     public function getUsersList(){
         $users = User::all();
         return json_encode($users);
@@ -45,6 +49,7 @@ class AdminUsersController extends Controller
             'status_id' => $request->status_id,
             'branch_id' => $request->branch_id
         ]);
+        
 
         if(!$user){
             return json_encode(false);
@@ -65,7 +70,8 @@ class AdminUsersController extends Controller
             'last_name' => 'required|max:50',
             'email' => 'required|email',
             'temp_password' => 'max:30',
-            'status_id' => 'required'
+            'status_id' => 'required',
+            'branch_id' => 'required'
         ]);
         
         $user = User::find($id);
@@ -75,6 +81,7 @@ class AdminUsersController extends Controller
             'email' => $request->email,
             'temp_password' => (($request->temp_password == '') ? $user->temp_password : $request->temp_password ),
             'status_id' => $request->status_id,
+            'branch_id' => $request->branch_id, 
             'updated_at' => Carbon::now()
         ]);
 

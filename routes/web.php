@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminBranchesController;
+use App\Http\Controllers\Admin\AdminHouseLotsController;
 use App\Http\Controllers\Admin\AdminUsersController;
+use App\Http\Controllers\Admin\AdminWaterReadingController;
 use App\Http\Controllers\App\Settings\SettingsApiController;
 use App\Http\Controllers\Core\Auth\User\UserPasswordController;
 use App\Http\Controllers\Core\LanguageController;
@@ -13,6 +15,12 @@ use App\Http\Controllers\Core\Auth\User\LoginController;
 use App\Http\Controllers\User\BranchController;
 use App\Http\Controllers\User\HouseLotController;
 use App\Http\Controllers\User\WaterTankReadingsController;
+use App\Models\Core\Auth\Role;
+
+// Route::get('create-user-role',function(){
+//     $role = Role::create(['name'=>'site_officer']);
+//     dd($role);
+// });
 
 Route::get('/forget-password', [UserPasswordController::class, 'passwordReset']);
 Route::get('user/registration', [\App\Http\Controllers\Core\Auth\User\RegistrationController::class, 'index']);
@@ -48,6 +56,7 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
     Route::get('users/{id}/edit',[AdminUsersController::class,'edit'])->name('admin.user-edit');
     Route::post('users/{id}/update', [AdminUsersController::class, 'update'])->name('admin.user-update');
     Route::delete('users/{id}/delete', [AdminUsersController::class, 'delete'])->name('admin.user-delete');
+    Route::get('get-user/{id}',[AdminUsersController::class,'getUser']);
 });
 Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
     Route::get('branches', [AdminBranchesController::class, 'index'])->name('admin.branches.index');
@@ -58,11 +67,36 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
     Route::post('branches/{id}/update', [AdminBranchesController::class, 'update'])->name('admin.branch-update');
     Route::delete('branches/{id}/delete', [AdminBranchesController::class, 'delete'])->name('admin.branch-delete');
 });
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('houselots', [AdminHouseLotsController::class, 'index'])->name('admin.houselots.index');
+    Route::get('houselots/create', [AdminHouseLotsController::class, 'create_view'])->name('admin.houselots.create-view');
+    Route::post('houselots/create', [AdminHouseLotsController::class, 'create'])->name('admin.houselots.create');
+    Route::get('get-houselots', [AdminHouseLotsController::class, 'getHouseLotsList'])->name('get.admin.houselots');
+    Route::get('houselots/{id}/edit', [AdminHouseLotsController::class, 'edit'])->name('admin.houselot-edit');
+    Route::post('houselots/{id}/update', [AdminHouseLotsController::class, 'update'])->name('admin.houselot-update');
+    Route::delete('houselots/{id}/delete', [AdminHouseLotsController::class, 'delete'])->name('admin.houselot-delete');
+});
+
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('water_readings', [AdminWaterReadingController::class, 'index'])->name('admin.water_readings.index');
+    Route::get('water_readings/create', [AdminWaterReadingController::class, 'create_view'])->name('admin.water_readings.create-view');
+    Route::post('water_readings/create', [AdminWaterReadingController::class, 'create'])->name('admin.water_readings.create');
+    Route::get('get-water_readings', [AdminWaterReadingController::class, 'getWaterReadingsList'])->name('get.admin.water_readings');
+    Route::get('water_readings/{id}/edit', [AdminWaterReadingController::class, 'edit'])->name('admin.water_reading-edit');
+    Route::post('water_readings/{id}/update', [AdminWaterReadingController::class, 'update'])->name('admin.water_reading-update');
+    Route::delete('water_readings/{id}/delete', [AdminWaterReadingController::class, 'delete'])->name('admin.water_reading-delete');
+    Route::get('get-reading-info/{id}',[AdminWaterReadingController::class,'getReadingInfo'])->name('admin.get_reading_info');
+    Route::get('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/',[WaterTankReadingsController::class,'create_view'])->name('user.water-tank.reading');
     Route::post('create-reading',[WaterTankReadingsController::class,'create'])->name('create.reading');
     Route::get('/get-branch/{id}',[BranchController::class,'getBranch']);
     Route::get('/get-houselot/{id}', [HouseLotController::class, 'getHouseLot']);
+    Route::get('show-reading/{id}',[WaterTankReadingsController::class,'showReading'])->name('show-reading');
+    Route::get('edit-reading/{id}', [WaterTankReadingsController::class, 'editReading'])->name('edit-reading');
+    Route::post('update-reading/{id}', [WaterTankReadingsController::class, 'update'])->name('update.reading');
 });
 
 /**

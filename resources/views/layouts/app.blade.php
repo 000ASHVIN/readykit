@@ -1,4 +1,8 @@
-<html dir="{{ config('settings.application.layout') }}" lang="<?php app()->getLocale(); ?>">
+<html dir="{{ config('settings.application.layout') }}" lang="<?php
+
+                                                                use Illuminate\Support\Facades\Cookie;
+
+                                                                app()->getLocale(); ?>">
 
 <head>
     <meta charset="UTF-8" />
@@ -41,6 +45,67 @@
     </div>
 
     @include('layouts.includes.footer')
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    @if( Cookie::has('error_for_create_reading') && Cookie::has('error_for_create_reading_field') )
+    <script>
+        swal({
+            title: "{{ Cookie::get('error_for_create_reading_field') }}",
+            text: "{{ Cookie::get('error_for_create_reading') }}",
+            icon: "error",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['error_for_create_reading']);
+    setcookie('error_for_create_reading', null, -1, '/');
+    unset($_COOKIE['error_for_create_reading_field']);
+    setcookie('error_for_create_reading_field', null, -1, '/');
+    ?>
+    @endif
+
+    @if( Cookie::has('reading_created') && Cookie::get('reading_created') )
+    <script>
+        swal({
+            title: "Reading Created!",
+            icon: "success",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['reading_created']);
+    setcookie('reading_created', null, -1, '/');
+    ?>
+    @endif
+    @if( Cookie::has('reading_updated') && Cookie::get('reading_updated') )
+    <script>
+        swal({
+            title: "Reading Updated!",
+            icon: "success",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['reading_updated']);
+    setcookie('reading_updated', null, -1, '/');
+    ?>
+    @endif
+    @if( Cookie::has('reading_not_updated') && Cookie::get('reading_not_updated') )
+    <script>
+        swal({
+            title: "Reading Not Updated!",
+            text: "There is problem updating Reading !!",
+            icon: "error",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['reading_not_updated']);
+    setcookie('reading_not_updated', null, -1, '/');
+    ?>
+    @endif
+
+
 </body>
 
 </html>

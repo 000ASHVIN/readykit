@@ -5,7 +5,7 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb p-0 d-flex align-items-center mb-primary">
             <li class="breadcrumb-item page-header d-flex align-items-center">
-              <h4 class="mb-0">Branches</h4>
+              <h4 class="mb-0">House Lots</h4>
             </li>
           </ol>
         </nav>
@@ -33,10 +33,13 @@
                 <span class="font-size-default"><span> id </span></span>
               </th>
               <th track-by="1" class="datatable-th pt-0">
-                <span class="font-size-default"><span> Name </span></span>
+                <span class="font-size-default"><span> Serial No </span></span>
               </th>
               <th track-by="2" class="datatable-th pt-0">
-                <span class="font-size-default"><span> Created On  </span></span>
+                <span class="font-size-default"><span> House Lot  </span></span>
+              </th>
+              <th track-by="2" class="datatable-th pt-0">
+                <span class="font-size-default"><span> Created on  </span></span>
               </th>
               <th track-by="4" class="datatable-th pt-0">
                 <span class="font-size-default"><span> Actions </span></span>
@@ -44,27 +47,30 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="branch in branches" :key="branch.id">
+            <tr v-for="houselot in houselots" :key="houselot.id">
               <td data-title="id" class="datatable-td">
-                <span class=""> {{ branch.id }} </span>
+                <span class=""> {{ houselot.id }} </span>
               </td>
               <td data-title="Name" class="datatable-td">
-                <span class=""> {{ branch.name }} </span>
+                <span class=""> {{ houselot.serial_num }} </span>
+              </td>
+              <td data-title="Name" class="datatable-td">
+                <span class=""> {{ houselot.house_lot_num }} </span>
               </td>
 
               <td data-title="Email" class="datatable-td">
-                <span class=""> {{ branch.created_at }} </span>
+                <span class=""> {{ houselot.created_at }} </span>
               </td>
               <td data-title="Action" class="datatable-td">
                 <a
-                  :href="getEditUrl(branch.id)"
+                  :href="getEditUrl(houselot.id)"
                   type="button"
                   class="btn btn-primary mr-2 mb-2 mb-sm-0"
                 >
                   <app-icon name="edit" />
                 </a>
                 <a
-                  @click="deleteConfirm(branch.id)"
+                  @click="deleteConfirm(houselot.id)"
                   type="button"
                   class="btn btn-danger mr-2 mb-2 mb-sm-0"
                 >
@@ -72,7 +78,7 @@
                 </a>
               </td>
             </tr>
-            <tr v-if="branches.length <= 0" v-cloak>
+            <tr v-if="houselots.length <= 0" v-cloak>
               <td colspan="5" align="center">no data found</td>
             </tr>
           </tbody>
@@ -223,42 +229,42 @@
 <script>
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
 export default {
-  name: "Branches",
+  name: "HouseLots",
   mixins: [FormMixin],
   components: {},
   data() {
     return {
-      branches: [],
+      houselots: [],
     };
   },
   methods: {
-    getBranches() {
-      this.axiosGet("/admin/get-branches")
+    getHouseLots() {
+      this.axiosGet("/admin/get-houselots")
         .then((response) => {
-          this.branches = response.data;
-          console.log(this.branches);
+          this.houselots = response.data;
+          console.log(this.houselots);
         })
         .catch(({ response }) => {
           console.log(response);
         });
     },
     getEditUrl(id) {
-      return "/admin/branches/" + id + "/edit";
+      return "/admin/houselots/" + id + "/edit";
     },
     deleteConfirm(id) {
       this.$confirm("Are you sure to delete?").then(() => {
-        this.deleteBranch(id);
+        this.deleteHouseLot(id);
       });
     },
-    deleteBranch(id){
-        this.axiosDelete("/admin/branches/"+id+"/delete")
+    deleteHouseLot(id){
+        this.axiosDelete("/admin/houselots/"+id+"/delete")
           .then((response) => {
               if(response.data){
-                  this.$alert("Branch Deleted !!");
-                  this.getBranches();
+                  this.$alert("HouseLot Deleted !!");
+                  this.getHouseLots();
               }
               else{
-                  this.$alert("There's Problem deleting Branch !!");
+                  this.$alert("There's Problem deleting HouseLot !!");
               }
           })
           .catch(({ response }) => {
@@ -267,7 +273,7 @@ export default {
     },
   },
   created() {
-    this.getBranches();
+    this.getHouseLots();
   },
 };
 </script>

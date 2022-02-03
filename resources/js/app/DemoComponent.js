@@ -78,5 +78,15 @@ Vue.component('admin-branches', require('./Components/Views/Admin/Branch/Branche
 Vue.component('admin-branch-edit', require('./Components/Views/Admin/Branch/EditBranch').default);
 Vue.component('admin-branch-create', require('./Components/Views/Admin/Branch/CreateBranch').default);
 
+Vue.component('admin-house_lots', require('./Components/Views/Admin/HouseLot/HouseLots').default);
+Vue.component('admin-house_lot-edit', require('./Components/Views/Admin/HouseLot/EditHouseLot').default);
+Vue.component('admin-house_lot-create', require('./Components/Views/Admin/HouseLot/CreateHouseLot').default);
+
+Vue.component('admin-water_readings', require('./Components/Views/Admin/WaterReading/WaterReadings').default);
+Vue.component('admin-water_reading-edit', require('./Components/Views/Admin/WaterReading/EditWaterReading').default);
+Vue.component('admin-water_reading-create', require('./Components/Views/Admin/WaterReading/CreateWaterReading').default);
+
 Vue.component('user-create-reading', require('./Components/Views/User/WaterTankReading/CreateReading').default);
+Vue.component('user-show-reading', require('./Components/Views/User/WaterTankReading/ShowReading').default);
+Vue.component('user-edit-reading', require('./Components/Views/User/WaterTankReading/EditReading').default);
 

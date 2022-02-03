@@ -1,5 +1,21 @@
 <template>
   <div class="content-wrapper">
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb p-0 d-flex align-items-center mb-primary">
+            <li class="breadcrumb-item page-header d-flex align-items-center">
+              <h4 class="mb-0">Users</h4>
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-sm-12 col-md-6 breadcrumb-side-button">
+        <div class="float-md-right mb-3 mb-sm-3 mb-md-0">
+          
+        </div>
+      </div>
+    </div>
     <div class="datatable">
       <div
         class="
@@ -78,7 +94,7 @@
         </table>
         <!---->
       </div>
-      <div class="p-primary">
+      <!-- <div class="p-primary">
         <div>
           <div class="d-flex flex-column flex-md-row justify-content-between">
             <div
@@ -214,7 +230,7 @@
             </nav>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

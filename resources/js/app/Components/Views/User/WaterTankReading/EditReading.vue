@@ -2,13 +2,18 @@
   <div class="content-wrapper">
     <div class="row">
       <div class="col-12 mb-primary">
-        
         <div class="card card-with-shadow border-0 h-100">
           <div class="card-header p-primary bg-transparent">
-            <h5 class="card-title m-0">Add Reading</h5>
+            <h5 class="card-title m-0">Edit Reading</h5>
           </div>
           <div class="card-body">
-            <form id="create-reading-form" method="post" action="/create-reading" enctype="multipart/form-data" class="mb-0">
+            <form
+              id="update-reading-form"
+              method="post"
+              :action="getUpdateLink()"
+              enctype="multipart/form-data"
+              class="mb-0"
+            >
               <div class="form-group row align-items-center">
                 <label class="col-md-2 mb-md-0"> Current Branch </label>
                 <div class="col-md-8">
@@ -122,6 +127,29 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> Remark </label>
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    name="remark"
+                    max="30"
+                    placeholder="Enter Remark"
+                    autocomplete="off"
+                    class="form-control"
+                    v-model="remark"
+                    required
+                  />
+                  <div>
+                    <small
+                      class="text-danger validation-error"
+                      v-if="this.error.remark"
+                    >
+                      {{ this.error.remark }}
+                    </small>
+                  </div>
+                </div>
+              </div>
               <div class="form-group row mb-0">
                 <label class="col-sm-2 mb-sm-0"> Upload with preview </label>
                 <div class="col-sm-8">
@@ -137,7 +165,6 @@
                           type="file"
                           name="image"
                           class="form-control d-none"
-                          @change="previewFiles"
                         />
                       </div>
                     </div>
@@ -156,7 +183,9 @@
                 </div>
               </div>
               <div class="mt-5 action-buttons">
-                <a @click="createReading" class="btn btn-primary mr-2"> Submit </a>
+                <a @click="updateReading" class="btn btn-primary mr-2">
+                  Submit
+                </a>
               </div>
             </form>
           </div>
@@ -169,9 +198,13 @@
 <script>
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
 export default {
-  name: "CreateReading",
+  name: "EditReading",
   props: {
-    user: {
+    // user: {
+    //   type: Object,
+    //   required: true,
+    // },
+    water_reading: {
       type: Object,
       required: true,
     },
@@ -182,26 +215,40 @@ export default {
     return {
       branch_data: [],
       house_lot_data: [],
+      id: "",
       branch: "",
       serial_no: "",
       house_lot_no: "",
       house_lot_id: "",
       current_reading: "",
-      // meter_picture: "",
+      remark: "",
       error: {
         branch: "",
         serial_no: "",
         house_lot_no: "",
         current_reading: "",
         meter_picture: "",
+        remark: "",
       },
     };
   },
   methods: {
-    previewFiles(event){
-      if(!(event.target.files.length > 0)){
-        this.error.meter_picture = "Meter Picture is Required"
-      }
+    getUpdateLink() {
+      return "/update-reading/" + this.water_reading.id;
+    },
+    // previewFiles(event){
+    //   if(!(event.target.files.length > 0)){
+    //     this.error.meter_picture = "Meter Picture is Required"
+    //   }
+    // },
+    setReading() {
+      this.id = this.water_reading.id;
+      this.branch = this.water_reading.branch_id;
+      this.serial_no = this.water_reading.serial_num;
+      this.getHouseLot();
+      // this.house_lot_id = this.water_reading.house_lot_id;
+      this.current_reading = this.water_reading.current_reading;
+      this.remark = this.water_reading.remark;
     },
     clearErrors() {
       this.error.branch = "";
@@ -209,6 +256,7 @@ export default {
       this.error.house_lot_no = "";
       this.error.current_reading = "";
       this.error.meter_picture = "";
+      this.error.remark = "";
     },
     checkValidation() {
       let is_error = false;
@@ -228,18 +276,17 @@ export default {
         is_error = true;
         this.error.current_reading = "Current Reading is required";
       }
-      if(!($('#inputs_custom_file')[0].files.length > 0)){
+      if (this.remark == "" && !this.remark) {
         is_error = true;
-        this.error.meter_picture = "Meter Picture is required";
+        this.error.remark = "Remark is required";
       }
       return is_error;
     },
-    async createReading() {
+    async updateReading() {
       this.clearErrors();
       if (!this.checkValidation()) {
-        $('#create-reading-form').submit()
+        $("#update-reading-form").submit();
       }
-      return false;
     },
     getBranch(id) {
       this.axiosGet("/get-branch/" + id)
@@ -253,26 +300,26 @@ export default {
           console.log(response);
         });
     },
-    getHouseLot(){
+    getHouseLot() {
       this.axiosGet("/get-houselot/" + this.serial_no)
-      .then((response) => {
-        if (response.data) {
-          this.error.serial_no = "";
-          this.error.house_lot_no = "";
-          this.house_lot_data = response.data;
-          this.house_lot_id = this.house_lot_data.id;
-          this.house_lot_no = this.house_lot_data.house_lot_num;
-        }
-      })
-      .catch(({ response }) => {
-        this.error.serial_no = "Enter Valid Serial number";
-        this.house_lot_no = '';
-        // console.log(response);
-      });
-    }
+        .then((response) => {
+          if (response.data) {
+            this.error.serial_no = "";
+            this.error.house_lot_no = "";
+            this.house_lot_data = response.data;
+            this.house_lot_id = this.house_lot_data.id;
+            this.house_lot_no = this.house_lot_data.house_lot_num;
+          }
+        })
+        .catch(({ response }) => {
+          this.error.serial_no = "Enter Valid Serial number";
+          this.house_lot_no = "";
+        });
+    },
   },
   created() {
-    this.getBranch(this.user.branch_id);
+    this.getBranch(this.water_reading.branch_id);
+    this.setReading();
   },
 };
 </script>
