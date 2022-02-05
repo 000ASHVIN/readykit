@@ -27,6 +27,7 @@ class UserTableSeeder extends Seeder
             'last_name' => 'Doe',
             'email' => 'admin@demo.com',
             'password' => Hash::make('123456'),
+            'branch_id' => 0,
             'status_id' => Status::findByNameAndType('status_active', 'user')->id
         ]);
 

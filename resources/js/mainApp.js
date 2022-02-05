@@ -13,8 +13,8 @@ window.Vue = Vue;
 import VueChatScroll from 'vue-chat-scroll'
 Vue.use(VueChatScroll)
 
-import VueSimpleAlert from "vue-simple-alert";
-Vue.use(VueSimpleAlert);
+// import VueSimpleAlert from "vue-simple-alert";
+// Vue.use(VueSimpleAlert);
 /**
  * vuex
  */

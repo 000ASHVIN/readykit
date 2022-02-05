@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         $this->call(NotificationSettingsSeeder::class);
         $this->call(NotificationTemplateSeeder::class);
         $this->call(CrudTableSeeder::class);
-        $this->call(UserDemoSeeder::class);
+        // $this->call(UserDemoSeeder::class);
         $this->call(PaymentMethodTableSeeder::class);
         $this->enableForeignKeys();
         Model::reguard();

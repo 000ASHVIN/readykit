@@ -15,12 +15,7 @@ use App\Http\Controllers\Core\Auth\User\LoginController;
 use App\Http\Controllers\User\BranchController;
 use App\Http\Controllers\User\HouseLotController;
 use App\Http\Controllers\User\WaterTankReadingsController;
-use App\Models\Core\Auth\Role;
-
-// Route::get('create-user-role',function(){
-//     $role = Role::create(['name'=>'site_officer']);
-//     dd($role);
-// });
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/forget-password', [UserPasswordController::class, 'passwordReset']);
 Route::get('user/registration', [\App\Http\Controllers\Core\Auth\User\RegistrationController::class, 'index']);
@@ -146,3 +141,14 @@ Route::any('symlink', [SymlinkController::class, 'run'])
  * Example: brand.index or dashboard
  * See @var PermissionMiddleware for more information
  */
+
+ Route::get('call/migrate', function() {
+    Artisan::call('migrate:fresh');
+    Artisan::call('db:seed');
+    echo "done";
+ });
+
+ Route::get('storage/link', function() {
+    Artisan::call('storage:link');
+    echo "done";
+ });
