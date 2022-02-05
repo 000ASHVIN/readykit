@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class WaterTankReadingsController extends Controller
@@ -72,11 +73,17 @@ class WaterTankReadingsController extends Controller
             $request->merge(['last_reading' => $last_reading->current_reading]);
         }
         
-        $destination_path = 'public/images/meter_readings';
+        $destination_path = 'public/images/meter_readings/';
         $image = $request->file('image');
-        // $resize_img = Image::make();
-        $image_name = "reading_".Carbon::now()->format('YmdHs').".". $image->getClientOriginalExtension();
-        $path = $image->storeAs($destination_path,$image_name);
+        $image_name = "reading_" . Carbon::now()->format('YmdHs') . "." . $image->getClientOriginalExtension();
+        $img = Image::make($image->path());
+        $img->resize(350, 350, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        // $img->resize(350, 350);
+        $img->stream();
+        // ->save(storage_path($destination_path . $image_name) );
+        Storage::put($destination_path . $image_name, $img);
         $request->merge(['image_name' => $image_name]);
 
         $water_reading = WaterMeterReading::create([

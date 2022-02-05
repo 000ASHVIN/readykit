@@ -15,7 +15,17 @@ use App\Http\Controllers\Core\Auth\User\LoginController;
 use App\Http\Controllers\User\BranchController;
 use App\Http\Controllers\User\HouseLotController;
 use App\Http\Controllers\User\WaterTankReadingsController;
+use App\Models\Core\Auth\Role;
 use Illuminate\Support\Facades\Artisan;
+
+// Route::get('create-user-role',function(){
+//     $role = Role::create(['name'=>'site_officer']);
+//     dd($role);
+// });
+// Route::get('test',function(){
+//     $test = 'demo';
+//     return view('report.water_reading_info',compact('test'));
+// });
 
 Route::get('/forget-password', [UserPasswordController::class, 'passwordReset']);
 Route::get('user/registration', [\App\Http\Controllers\Core\Auth\User\RegistrationController::class, 'index']);
@@ -152,3 +162,7 @@ Route::any('symlink', [SymlinkController::class, 'run'])
     Artisan::call('storage:link');
     echo "done";
  });
+Route::get('vendor-publish',function(){
+    Artisan::call('vendor:publish');
+    echo "done";
+});

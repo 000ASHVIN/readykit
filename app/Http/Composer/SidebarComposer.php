@@ -402,7 +402,7 @@ class SidebarComposer
                     'subMenu' => [
                         [
                             'name' => 'Create Tank Reading',
-                            'url' => request()->root() . '/admin/readings/create',
+                            'url' => request()->root(),
                             'permission' => '',
                         ],
 

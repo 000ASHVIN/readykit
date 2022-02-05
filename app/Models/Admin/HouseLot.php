@@ -13,4 +13,8 @@ class HouseLot extends Model
         'house_lot_num'
     ];
     use HasFactory;
+    public function water_readings()
+    {
+        return $this->hasMany(WaterMeterReading::class);
+    }
 }
