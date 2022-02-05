@@ -6,15 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Branch;
 use App\Models\Admin\HouseLot;
 use App\Models\Admin\WaterMeterReading;
+// use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use App\Exports\WaterReadingExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminWaterReadingController extends Controller
 {
+    protected $pdfmaker;
     public function index()
     {
         return view('admin.water_readings.index');
@@ -22,7 +26,7 @@ class AdminWaterReadingController extends Controller
 
     public function getWaterReadingsList()
     {
-        $water_readings = WaterMeterReading::all();
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot','user'])->get();
         return json_encode($water_readings);
     }
 
@@ -190,9 +194,49 @@ class AdminWaterReadingController extends Controller
     }
 
     public function getReadingInfo($id){
-        $water_reading = WaterMeterReading::find($id);
-        $branch = Branch::find($water_reading->branch_id);
-        $house_lot = HouseLot::find($water_reading->house_lot_id);
+        // // dd('hello');
+        // $data = [];
+        // $data['water_reading'] = WaterMeterReading::find($id);
+        // $data['branch'] = Branch::find($data['water_reading']->branch_id);
+        // $data['house_lot'] = HouseLot::find($data['water_reading']->house_lot_id);
+        // $pdf =new PDF();
+        // $pdf = PDF::loadView('report.water_reading_info', $data);
+
+        // return $pdf->download('water_reading_'. Carbon::now()->format('YmdHs').'.pdf');
         
+    }
+
+    public function getAllExportData(){
+
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot'])->get();
+        $all_records = [
+            [
+                'House Lot',
+                'Branch',
+                'Serial No',
+                'Current Reading',
+                'Last Reading',
+                'Date Submitted',
+                'Image uploaded',
+                'Remark',
+            ]];
+        foreach($water_readings as $reading){
+            // dd(Carbon::parse($reading->created_at)->format('d/m/Y h:m'));
+            $record = [
+                $reading->house_lot->house_lot_num,
+                $reading->branch->name,
+                $reading->serial_num,
+                $reading->current_reading,
+                $reading->last_reading ?? 'N/A',
+                Carbon::parse($reading->created_at)->format('d/m/Y h:m'),
+                $reading->image ? 'yes' : 'no',
+                $reading->remark ?? 'N/A'
+            ];
+            array_push($all_records,$record);
+        }
+
+        $export = new WaterReadingExport($all_records);
+        return Excel::download($export, 'Water_readings.xlsx');
+
     }
 }

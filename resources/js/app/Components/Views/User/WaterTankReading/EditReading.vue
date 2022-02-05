@@ -155,7 +155,15 @@
                 <div class="col-sm-8">
                   <div>
                     <div class="custom-image-upload-wrapper">
-                      <div class="image-area d-flex"></div>
+                      <img
+                        class="image-area d-flex"
+                        id="output"
+                        :src="
+                          base_url +
+                          '/storage/images/meter_readings/' +
+                          water_reading.image
+                        "
+                      />
                       <div class="input-area">
                         <label id="upload-label" for="inputs_custom_file">
                           Upload your file
@@ -165,6 +173,7 @@
                           type="file"
                           name="image"
                           class="form-control d-none"
+                          @change="previewFiles"
                         />
                       </div>
                     </div>
@@ -236,11 +245,12 @@ export default {
     getUpdateLink() {
       return "/update-reading/" + this.water_reading.id;
     },
-    // previewFiles(event){
-    //   if(!(event.target.files.length > 0)){
-    //     this.error.meter_picture = "Meter Picture is Required"
-    //   }
-    // },
+    previewFiles(event) {
+      if (event.target.files.length > 0) {
+        var image = document.getElementById("output");
+        image.src = URL.createObjectURL(event.target.files[0]);
+      }
+    },
     setReading() {
       this.id = this.water_reading.id;
       this.branch = this.water_reading.branch_id;
@@ -318,6 +328,7 @@ export default {
     },
   },
   created() {
+    this.base_url = window.location.origin;
     this.getBranch(this.water_reading.branch_id);
     this.setReading();
   },

@@ -127,7 +127,7 @@
                 <div class="col-sm-8">
                   <div>
                     <div class="custom-image-upload-wrapper">
-                      <div class="image-area d-flex"></div>
+                      <img class="image-area d-flex" id="output">
                       <div class="input-area">
                         <label id="upload-label" for="inputs_custom_file">
                           Upload your file
@@ -201,6 +201,9 @@ export default {
     previewFiles(event){
       if(!(event.target.files.length > 0)){
         this.error.meter_picture = "Meter Picture is Required"
+      }else{
+        var image = document.getElementById('output');
+	      image.src = URL.createObjectURL(event.target.files[0]);
       }
     },
     clearErrors() {
@@ -276,3 +279,4 @@ export default {
   },
 };
 </script>
+

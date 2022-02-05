@@ -49,6 +49,11 @@ class User extends BaseUser implements HasLocalePreference
         CausesActivity,
         UserStatus;
 
+    public function water_readings()
+    {
+        return $this->hasMany(WaterMeterReading::class);
+    }
+
     public function preferredLocale()
     {
         return app()->getLocale() ?? 'en';

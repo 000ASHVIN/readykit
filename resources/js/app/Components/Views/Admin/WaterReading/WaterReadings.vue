@@ -12,14 +12,13 @@
       </div>
       <div class="col-sm-12 col-md-6 breadcrumb-side-button">
         <div class="float-md-right mb-3 mb-sm-3 mb-md-0">
-          <a
-            type="button"
-            data-toggle="modal"
+          <!-- <a
             class="btn btn-primary btn-with-shadow"
+            :href="'/admin/get-all-export-data'"
           >
                    <app-icon name="clipboard"/>
        Export All data
-          </a>
+          </a> -->
         </div>
       </div>
     </div>
@@ -62,10 +61,10 @@
                 <span class=""> {{ water_reading.id }} </span>
               </td>
               <td data-title="created_by" class="datatable-td">
-                <span class=""> {{ water_reading.user_id }} </span>
+                <span class=""> {{ water_reading.user.full_name }} </span>
               </td>
               <td data-title="branch" class="datatable-td">
-                <span class=""> {{ water_reading.branch_id }} </span>
+                <span class=""> {{ water_reading.branch.name }} </span>
               </td>
 
               <td data-title="serial_no" class="datatable-td">
@@ -99,13 +98,13 @@
                 >
                   <app-icon name="trash-2" />
                 </a>
-                <a
+                <!-- <a
                   :href="getDownloadUrl(water_reading.id)"
                   type="button"
                   class="btn btn-info mr-2 mb-2 mb-sm-0"
                 >
                   <app-icon name="download" />
-                </a>
+                </a> -->
               </td>
             </tr>
             <tr v-if="water_readings.length <= 0" v-cloak>
@@ -273,6 +272,7 @@ export default {
       this.axiosGet("/admin/get-water_readings")
         .then((response) => {
           this.water_readings = response.data;
+          console.log(this.water_readings);
         })
         .catch(({ response }) => {
           console.log(response);
@@ -309,7 +309,7 @@ export default {
   },
   created() {
     this.base_url = window.location.origin;
-    console.log(this.base_url);
+    // console.log(this.water_readings);
     this.getWaterReadings();
   },
 };

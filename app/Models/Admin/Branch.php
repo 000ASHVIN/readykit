@@ -12,4 +12,8 @@ class Branch extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function water_readings(){
+        return $this->hasMany(WaterMeterReading::class);
+    }
 }
