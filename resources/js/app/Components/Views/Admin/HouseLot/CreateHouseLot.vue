@@ -85,11 +85,11 @@ export default {
         let is_error = false;
         if(this.house_lot_no == "" && !this.house_lot_no){
           is_error = true;
-          this.error.house_lot_no = "Name is required";
+          this.error.house_lot_no = "house lot number is required";
         }
         if(this.serial_no == "" && !this.serial_no){
           is_error = true;
-          this.error.serial_no = "Name is required";
+          this.error.serial_no = "Serial number is required";
         }
         return is_error;
       },

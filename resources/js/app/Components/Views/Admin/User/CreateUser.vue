@@ -92,9 +92,9 @@
                   <select
                     id="inputs_status"
                     class="custom-select"
-                    style="
-                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
-                    "
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
                     v-model="status"
                   >
                     <option value="">Select Status</option>
@@ -115,9 +115,9 @@
                   <select
                     id="inputs_status"
                     class="custom-select"
-                    style="
-                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
-                    "
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
                     v-model="branch"
                   >
                     <option value="">Select Branch</option>
@@ -136,9 +136,9 @@
                   <select
                     id="inputs_status"
                     class="custom-select"
-                    style="
-                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
-                    "
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
                     v-model="role"
                   >
                     <option value="">Select Role</option>
@@ -182,6 +182,7 @@ export default {
         status:'',
         branch:'',
         role:'',
+        dropDownImage:'',
         error:{
           first_name:'',
           last_name:'',
@@ -223,7 +224,7 @@ export default {
         }
         if(this.temp_password == "" && !this.temp_password){
           is_error = true;
-          this.error.temp_password = "Status is required";
+          this.error.temp_password = "Temporary password is required";
         }
         if(this.branch == "" && !this.branch){
           is_error = true;
@@ -301,6 +302,7 @@ export default {
       }
   },
   created() {
+    this.dropDownImage = window.location.origin+'/images/chevron-down.svg';
     this.getBranches();
     this.getRoles();
   }

@@ -26,6 +26,9 @@
           pt-primary
         "
       >
+      <table v-if="fetching">
+          <img :src="base_url+'/images/Circle-Preloader-1.gif'" alt="fetching..">
+        </table>
         <table class="table mb-0">
           <thead>
             <tr>
@@ -53,7 +56,7 @@
               </td>
 
               <td data-title="Email" class="datatable-td">
-                <span class=""> {{ branch.created_at }} </span>
+                <span class=""> {{ (branch.created_at).substring(0,10) }} </span>
               </td>
               <td data-title="Action" class="datatable-td">
                 <a
@@ -72,7 +75,7 @@
                 </a>
               </td>
             </tr>
-            <tr v-if="branches.length <= 0" v-cloak>
+            <tr v-if="branches.length <= 0 && !fetching" v-cloak>
               <td colspan="5" align="center">no data found</td>
             </tr>
           </tbody>
@@ -229,6 +232,8 @@ export default {
   data() {
     return {
       branches: [],
+      fetching : false,
+      base_url:''
     };
   },
   methods: {
@@ -236,6 +241,7 @@ export default {
       this.axiosGet("/admin/get-branches")
         .then((response) => {
           this.branches = response.data;
+          this.fetching = false;
           console.log(this.branches);
         })
         .catch(({ response }) => {
@@ -267,6 +273,8 @@ export default {
     },
   },
   created() {
+    this.base_url = window.location.origin;
+    this.fetching = true;
     this.getBranches();
   },
 };

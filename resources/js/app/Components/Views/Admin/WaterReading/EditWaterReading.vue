@@ -204,10 +204,6 @@ import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
 export default {
   name: "EditReading",
   props: {
-    // user: {
-    //   type: Object,
-    //   required: true,
-    // },
     water_reading: {
       type: Object,
       required: true,
@@ -226,6 +222,7 @@ export default {
       house_lot_id: "",
       current_reading: "",
       remark: "",
+      dropDownImage:'',
       error: {
         branch: "",
         serial_no: "",
@@ -321,6 +318,7 @@ export default {
   },
   created() {
     this.base_url = window.location.origin;
+    this.dropDownImage = window.location.origin+'/images/chevron-down.svg';
     this.getBranch(this.water_reading.branch_id);
     this.setReading();
   },
