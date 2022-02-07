@@ -92,9 +92,9 @@
                   <select
                     id="inputs_status"
                     class="custom-select"
-                    style="
-                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
-                    "
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
                     v-model="status"
                   >
                     <option value="">Choose One</option>
@@ -115,9 +115,9 @@
                   <select
                     id="inputs_status"
                     class="custom-select"
-                    style="
-                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
-                    "
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
                     v-model="branch"
                   >
                     <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name}}</option>
@@ -165,6 +165,7 @@ export default {
         temp_password:"",
         status:'',
         branches:[],
+        dropDownImage:'',
         error:{
           first_name:'',
           last_name:'',
@@ -249,7 +250,6 @@ export default {
         })
         .catch(({ response }) => {
           if(response.status == 422 ){
-            // console.log(response.data.errors.temp_password);
             if(response.data.errors.first_name){
               this.$toastr.e(response.data.errors.first_name);
             }
@@ -283,6 +283,7 @@ export default {
       }
   },
   created() {
+      this.dropDownImage = window.location.origin+'/images/chevron-down.svg';
       this.setUser();
       this.getBranches();
   },

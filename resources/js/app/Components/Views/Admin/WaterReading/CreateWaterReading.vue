@@ -15,9 +15,9 @@
                   <select
                     id="inputs_status"
                     class="custom-select"
-                    style="
-                      background-image: url('http://127.0.0.1:8000/images/chevron-down.svg');
-                    "
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
                     name="user_id"
                     v-model="selected_user_id"
                     v-on:change="selectUser(selected_user_id)"
@@ -208,6 +208,7 @@ export default {
       house_lot_id: "",
       current_reading: "",
       // meter_picture: "",
+      dropDownImage:'',
       error: {
         user:"",
         branch: "",
@@ -327,6 +328,7 @@ export default {
   },
   created() {
     // this.getBranch(this.user.branch_id);
+    this.dropDownImage = window.location.origin+'/images/chevron-down.svg';
     this.getUsers();
   },
 };

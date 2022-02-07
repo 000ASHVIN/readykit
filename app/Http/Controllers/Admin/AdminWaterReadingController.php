@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Branch;
 use App\Models\Admin\HouseLot;
 use App\Models\Admin\WaterMeterReading;
-// use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -194,15 +194,14 @@ class AdminWaterReadingController extends Controller
     }
 
     public function getReadingInfo($id){
-        // // dd('hello');
-        // $data = [];
-        // $data['water_reading'] = WaterMeterReading::find($id);
-        // $data['branch'] = Branch::find($data['water_reading']->branch_id);
-        // $data['house_lot'] = HouseLot::find($data['water_reading']->house_lot_id);
-        // $pdf =new PDF();
-        // $pdf = PDF::loadView('report.water_reading_info', $data);
+        $data = [];
+        $data['water_reading'] = WaterMeterReading::find($id);
+        $data['branch'] = Branch::find($data['water_reading']->branch_id);
+        $data['house_lot'] = HouseLot::find($data['water_reading']->house_lot_id);
+        $pdf =new PDF();
+        $pdf = PDF::loadView('report.water_reading_info', $data);
 
-        // return $pdf->download('water_reading_'. Carbon::now()->format('YmdHs').'.pdf');
+        return $pdf->download('water_reading_'. Carbon::now()->format('YmdHs').'.pdf');
         
     }
 

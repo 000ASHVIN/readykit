@@ -50,6 +50,9 @@
                     v-model="serial_no"
                     v-on:change="getHouseLot()"
                   />
+                  <img :src="base_url+'/images/Spinner-2.gif'" alt="loadiing.." id="voicebutton" v-if="serial_no_process">
+                  <svg v-if="serial_no_done" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle" data-v-5516bb02="" id="verifiedbutton"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  <svg v-if="serial_no_invalid" id="invalidbutton" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                   <input
                     type="hidden"
                     name="serial_num"
@@ -187,6 +190,9 @@ export default {
       house_lot_no: "",
       house_lot_id: "",
       current_reading: "",
+      serial_no_process:false,
+      serial_no_done:false,
+      serial_no_invalid:false,
       // meter_picture: "",
       error: {
         branch: "",
@@ -257,26 +263,60 @@ export default {
         });
     },
     getHouseLot(){
-      this.axiosGet("/get-houselot/" + this.serial_no)
-      .then((response) => {
-        if (response.data) {
-          this.error.serial_no = "";
-          this.error.house_lot_no = "";
-          this.house_lot_data = response.data;
-          this.house_lot_id = this.house_lot_data.id;
-          this.house_lot_no = this.house_lot_data.house_lot_num;
-        }
-      })
-      .catch(({ response }) => {
-        this.error.serial_no = "Enter Valid Serial number";
-        this.house_lot_no = '';
-        // console.log(response);
-      });
+        this.serial_no_done = false;
+        this.serial_no_process = true;
+        this.serial_no_invalid =false;
+        this.axiosGet("/get-houselot/" + this.serial_no)
+        .then((response) => {
+          if (response.data) {
+            this.error.serial_no = "";
+            this.error.house_lot_no = "";
+            this.serial_no_process = false;
+            this.serial_no_done = true;
+            this.house_lot_data = response.data;
+            this.house_lot_id = this.house_lot_data.id;
+            this.house_lot_no = this.house_lot_data.house_lot_num;
+          }
+        })
+        .catch(({ response }) => {
+          this.serial_no_process = false;
+          this.serial_no_invalid = true;
+          this.error.serial_no = "Enter Valid Serial number";
+          this.house_lot_no = '';
+        });
+      
     }
   },
   created() {
+    this.base_url = window.location.origin;
     this.getBranch(this.user.branch_id);
   },
 };
 </script>
+
+<style scoped>
+    #voicebutton{
+      width: 23px;
+      height: 23px;
+      position: absolute;
+      right: 20px;
+      top: 10px;
+    }
+    #verifiedbutton{
+      width: 23px;
+      height: 23px;
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      color:green;
+    }
+    #invalidbutton{
+      width: 23px;
+      height: 23px;
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      color:red;
+    }
+</style>
 

@@ -12,13 +12,13 @@
       </div>
       <div class="col-sm-12 col-md-6 breadcrumb-side-button">
         <div class="float-md-right mb-3 mb-sm-3 mb-md-0">
-          <!-- <a
+          <a
             class="btn btn-primary btn-with-shadow"
             :href="'/admin/get-all-export-data'"
           >
                    <app-icon name="clipboard"/>
        Export All data
-          </a> -->
+          </a>
         </div>
       </div>
     </div>
@@ -32,25 +32,37 @@
           pt-primary
         "
       >
-        <table class="table mb-0">
+      <table v-if="fetching">
+          <img :src="base_url+'/images/Circle-Preloader-1.gif'" alt="fetching..">
+        </table>
+        <table v-else class="table mb-0">
           <thead>
             <tr>
               <th track-by="0" class="datatable-th pt-0">
-                <span class="font-size-default"><span> Id </span></span>
+                <span class="font-size-default"><span> House Lot </span></span>
               </th>
               <th track-by="1" class="datatable-th pt-0">
-                <span class="font-size-default"><span> Created By </span></span>
-              </th>
-              <th track-by="2" class="datatable-th pt-0">
                 <span class="font-size-default"><span> Branch </span></span>
               </th>
-              <th track-by="3" class="datatable-th pt-0">
+              <th track-by="2" class="datatable-th pt-0">
                 <span class="font-size-default"><span>Serial No</span></span>
               </th>
+              <th track-by="3" class="datatable-th pt-0">
+                <span class="font-size-default"><span>Curr. Reading</span></span>
+              </th>
               <th track-by="4" class="datatable-th pt-0">
-                <span class="font-size-default"><span>Image</span></span>
+                <span class="font-size-default"><span>Last Reading</span></span>
+              </th>
+              <th track-by="4" class="datatable-th pt-0">
+                <span class="font-size-default"><span>Date Submitted</span></span>
               </th>
               <th track-by="5" class="datatable-th pt-0">
+                <span class="font-size-default"><span>Image</span></span>
+              </th>
+              <th track-by="6" class="datatable-th pt-0">
+                <span class="font-size-default"><span>Create By</span></span>
+              </th>
+              <th track-by="7" class="datatable-th pt-0">
                 <span class="font-size-default"><span>Actions</span></span>
               </th>
             </tr>
@@ -58,17 +70,22 @@
           <tbody>
             <tr v-for="water_reading in water_readings" :key="water_reading.id">
               <td data-title="id" class="datatable-td">
-                <span class=""> {{ water_reading.id }} </span>
+                <span class=""> {{ water_reading.house_lot.house_lot_num }} </span>
               </td>
               <td data-title="created_by" class="datatable-td">
-                <span class=""> {{ water_reading.user.full_name }} </span>
-              </td>
-              <td data-title="branch" class="datatable-td">
                 <span class=""> {{ water_reading.branch.name }} </span>
               </td>
-
-              <td data-title="serial_no" class="datatable-td">
+              <td data-title="branch" class="datatable-td">
                 <span class=""> {{ water_reading.serial_num }} </span>
+              </td>
+              <td data-title="serial_no" class="datatable-td">
+                <span class="">  {{ water_reading.current_reading ? (water_reading.current_reading.length > 5 ? (water_reading.current_reading ).substring(0,5)+'..' :water_reading.current_reading )  : '-' }}</span>
+              </td>
+              <td data-title="serial_no" class="datatable-td">
+                <span class=""> {{ water_reading.last_reading ? (water_reading.last_reading.length > 5 ? (water_reading.last_reading ).substring(0,5)+'..' :water_reading.last_reading )  : '-' }} </span>
+              </td>
+              <td data-title="serial_no" class="datatable-td">
+                <span class=""> {{ (water_reading.created_at).substring(0,10) }} </span>
               </td>
               <td data-title="Status" class="datatable-td">
                 <div class="avatars-w-50">
@@ -83,31 +100,34 @@
                   />
                 </div>
               </td>
+              <td data-title="serial_no" class="datatable-td">
+                <span class=""> {{ water_reading.user.first_name }} </span>
+              </td>
               <td data-title="Action" class="datatable-td">
                 <a
                   :href="getEditUrl(water_reading.id)"
                   type="button"
-                  class="btn btn-primary mr-2 mb-2 mb-sm-0"
+                  class="btn btn-primary table-btn mr-2 mb-2 mb-sm-0"
                 >
                   <app-icon name="edit" />
                 </a>
                 <a
                   @click="deleteConfirm(water_reading.id)"
                   type="button"
-                  class="btn btn-danger mr-2 mb-2 mb-sm-0"
+                  class="btn btn-danger table-btn mr-2 mb-2 mb-sm-0"
                 >
                   <app-icon name="trash-2" />
                 </a>
-                <!-- <a
+                <a
                   :href="getDownloadUrl(water_reading.id)"
                   type="button"
-                  class="btn btn-info mr-2 mb-2 mb-sm-0"
+                  class="btn btn-info table-btn mr-2 mb-2 mb-sm-0"
                 >
                   <app-icon name="download" />
-                </a> -->
+                </a>
               </td>
             </tr>
-            <tr v-if="water_readings.length <= 0" v-cloak>
+            <tr v-if="water_readings.length <= 0  && !fetching" v-cloak>
               <td colspan="5" align="center">no data found</td>
             </tr>
           </tbody>
@@ -265,6 +285,7 @@ export default {
     return {
       water_readings: [],
       base_url: "",
+      fetching:false
     };
   },
   methods: {
@@ -272,7 +293,8 @@ export default {
       this.axiosGet("/admin/get-water_readings")
         .then((response) => {
           this.water_readings = response.data;
-          console.log(this.water_readings);
+          this.fetching = false;
+          console.log(this.water_readings[0]);
         })
         .catch(({ response }) => {
           console.log(response);
@@ -310,7 +332,13 @@ export default {
   created() {
     this.base_url = window.location.origin;
     // console.log(this.water_readings);
+    this.fetching = true;
     this.getWaterReadings();
   },
 };
 </script>
+<style scoped>
+ .table-btn{
+   margin-top: 3px;
+ }
+</style>

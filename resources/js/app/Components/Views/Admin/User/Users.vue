@@ -26,7 +26,10 @@
           pt-primary
         "
       >
-        <table class="table mb-0">
+        <table v-if="fetching">
+          <img :src="base_url+'/images/Circle-Preloader-1.gif'" alt="fetching..">
+        </table>
+        <table v-else class="table mb-0">
           <thead>
             <tr>
               <th track-by="0" class="datatable-th pt-0">
@@ -87,7 +90,7 @@
                 </a>
               </td>
             </tr>
-            <tr v-if="users.length <= 0" v-cloak>
+            <tr v-if="users.length <= 0 && !fetching" v-cloak>
               <td colspan="5" align="center">no data found</td>
             </tr>
           </tbody>
@@ -244,6 +247,8 @@ export default {
   data() {
     return {
       users: [],
+      fetching:false,
+      base_url:''
     };
   },
   methods: {
@@ -251,7 +256,7 @@ export default {
       this.axiosGet("/admin/get-users")
         .then((response) => {
           this.users = response.data;
-          console.log(this.users);
+          this.fetching = false;
         })
         .catch(({ response }) => {
           console.log(response);
@@ -286,6 +291,8 @@ export default {
     editUser(id) {},
   },
   created() {
+    this.base_url = window.location.origin;
+    this.fetching = true;
     this.getUsers();
   },
 };
