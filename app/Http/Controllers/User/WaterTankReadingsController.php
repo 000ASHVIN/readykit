@@ -30,7 +30,7 @@ class WaterTankReadingsController extends Controller
     }
 
     public function editReading($id){
-        $water_reading = WaterMeterReading::find($id);
+        $water_reading = WaterMeterReading::with(['branch', 'house_lot', 'user'])->where('id', $id)->first();
         return view('user-side.water_tank_reading.edit',compact('water_reading'));
     }
 

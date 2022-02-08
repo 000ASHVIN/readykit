@@ -20,6 +20,11 @@ class AdminUsersController extends Controller
     }
 
     public function getUsersList(){
+        $users = User::paginate(10);
+        // dd($users);
+        return json_encode($users);
+    }
+    public function getUsersForFormList(){
         $users = User::all();
         return json_encode($users);
     }

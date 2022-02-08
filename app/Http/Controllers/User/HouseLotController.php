@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 class HouseLotController extends Controller
 {
-    public function getHouseLot($id){
-        $house_lot = HouseLot::where('serial_num', $id)->first();
-        if(!$house_lot){
+    public function getSerialNum($id){
+        // dd($id);
+        $serial_num = HouseLot::where('house_lot_num', $id)->first();
+        if(!$serial_num){
             return response()->json(false,422);
         }
-        return json_encode($house_lot) ;
+        return json_encode($serial_num) ;
     }
 }

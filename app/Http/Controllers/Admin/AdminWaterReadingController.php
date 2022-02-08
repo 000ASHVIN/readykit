@@ -26,8 +26,8 @@ class AdminWaterReadingController extends Controller
 
     public function getWaterReadingsList()
     {
-        $water_readings = WaterMeterReading::with(['branch', 'house_lot','user'])->get();
-        return json_encode($water_readings);
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot','user'])->paginate(10);
+        return response()->json($water_readings);
     }
 
     public function create_view()
@@ -103,12 +103,14 @@ class AdminWaterReadingController extends Controller
 
     public function edit($id)
     {
-        $water_reading = WaterMeterReading::find($id);
+        $water_reading = WaterMeterReading::with(['branch', 'house_lot', 'user'])->where('id',$id)->first();
+        // dd($water_reading);
         return view('admin.water_readings.edit', compact('water_reading'));
     }
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'image' => 'image:jpg,jpeg,png',
             'current_reading' => 'required|max:50',

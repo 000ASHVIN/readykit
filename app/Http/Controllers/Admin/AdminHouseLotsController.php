@@ -17,7 +17,7 @@ class AdminHouseLotsController extends Controller
 
     public function getHouseLotsList()
     {
-        $houselots = HouseLot::all();
+        $houselots = HouseLot::paginate(10);
         return json_encode($houselots);
     }
 
@@ -65,8 +65,8 @@ class AdminHouseLotsController extends Controller
         $update_reading = WaterMeterReading::where('house_lot_id', $houselot->id)->update([
             'serial_num' => $request->serial_no
         ]);
-
-        if ($updated && $update_reading) {
+        
+        if ($updated) {
             return json_encode(true);
         }
         return json_encode(false);

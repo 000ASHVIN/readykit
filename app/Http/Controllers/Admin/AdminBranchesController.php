@@ -16,7 +16,7 @@ class AdminBranchesController extends Controller
 
     public function getBranchesList()
     {
-        $users = Branch::all();
+        $users = Branch::paginate(10);
         return json_encode($users);
     }
 

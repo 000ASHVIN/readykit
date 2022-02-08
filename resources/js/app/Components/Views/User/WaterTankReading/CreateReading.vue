@@ -38,21 +38,43 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group row align-items-center">
-                <label class="col-md-2 mb-md-0"> Serial No </label>
+               <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> House Lot </label>
                 <div class="col-md-8">
                   <input
-                    type="text"
-                    name="serial_num_demo"
-                    placeholder="Place meter serial no."
+                    type="hidden"
+                    name="house_lot_id"
+                    required="required"
                     autocomplete="off"
                     class="form-control"
-                    v-model="serial_no"
-                    v-on:change="getHouseLot()"
+                    :value="this.house_lot_id"
                   />
                   <img :src="base_url+'/images/Spinner-2.gif'" alt="loadiing.." id="voicebutton" v-if="serial_no_process">
                   <svg v-if="serial_no_done" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle" data-v-5516bb02="" id="verifiedbutton"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                   <svg v-if="serial_no_invalid" id="invalidbutton" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                  <input
+                    type="text"
+                    name="inputs_email"
+                    required="required"
+                    placeholder="Place house lot no."
+                    autocomplete="off"
+                    class="form-control"
+                    v-model="house_lot_no"
+                    v-on:change="getSerialNum()"
+                  />
+                  <div>
+                    <small
+                      class="text-danger validation-error"
+                      v-if="this.error.house_lot_no"
+                    >
+                      {{ this.error.house_lot_no }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> Serial No </label>
+                <div class="col-md-8">
                   <input
                     type="hidden"
                     name="serial_num"
@@ -61,44 +83,21 @@
                     class="form-control"
                     :value="this.serial_no"
                   />
+                  <input
+                    type="text"
+                    name="serial_num_demo"
+                    placeholder="{autofill based on house lot no.}"
+                    autocomplete="off"
+                    class="form-control"
+                    v-model="serial_no"
+                    disabled
+                  />
                   <div>
                     <small
                       class="text-danger validation-error"
                       v-if="this.error.serial_no"
                     >
                       {{ this.error.serial_no }}
-                    </small>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row align-items-center">
-                <label class="col-md-2 mb-md-0"> House Lot </label>
-                <div class="col-md-8">
-                  <input
-                    type="hidden"
-                    name="house_lot_id"
-                    required="required"
-                    placeholder="{autofill based on serial no.}"
-                    autocomplete="off"
-                    class="form-control"
-                    :value="this.house_lot_id"
-                  />
-                  <input
-                    type="text"
-                    name="inputs_email"
-                    required="required"
-                    placeholder="{autofill based on serial no.}"
-                    autocomplete="off"
-                    class="form-control"
-                    :value="this.house_lot_no"
-                    disabled
-                  />
-                  <div>
-                    <small
-                      class="text-danger validation-error"
-                      v-if="this.error.house_lot_no"
-                    >
-                      {{ this.error.house_lot_no }}
                     </small>
                   </div>
                 </div>
@@ -262,30 +261,54 @@ export default {
           console.log(response);
         });
     },
-    getHouseLot(){
-        this.serial_no_done = false;
-        this.serial_no_process = true;
-        this.serial_no_invalid =false;
-        this.axiosGet("/get-houselot/" + this.serial_no)
-        .then((response) => {
-          if (response.data) {
-            this.error.serial_no = "";
-            this.error.house_lot_no = "";
-            this.serial_no_process = false;
-            this.serial_no_done = true;
-            this.house_lot_data = response.data;
-            this.house_lot_id = this.house_lot_data.id;
-            this.house_lot_no = this.house_lot_data.house_lot_num;
-          }
-        })
-        .catch(({ response }) => {
-          this.serial_no_process = false;
-          this.serial_no_invalid = true;
-          this.error.serial_no = "Enter Valid Serial number";
-          this.house_lot_no = '';
-        });
+    // getHouseLot(){
+    //     this.serial_no_done = false;
+    //     this.serial_no_process = true;
+    //     this.serial_no_invalid =false;
+    //     this.axiosGet("/get-houselot/" + this.serial_no)
+    //     .then((response) => {
+    //       if (response.data) {
+    //         this.error.serial_no = "";
+    //         this.error.house_lot_no = "";
+    //         this.serial_no_process = false;
+    //         this.serial_no_done = true;
+    //         this.house_lot_data = response.data;
+    //         this.house_lot_id = this.house_lot_data.id;
+    //         this.house_lot_no = this.house_lot_data.house_lot_num;
+    //       }
+    //     })
+    //     .catch(({ response }) => {
+    //       this.serial_no_process = false;
+    //       this.serial_no_invalid = true;
+    //       this.error.serial_no = "Enter Valid Serial number";
+    //       this.house_lot_no = '';
+    //     });
       
-    }
+    // },
+    getSerialNum(){
+      this.serial_no_done = false;
+      this.serial_no_process = true;
+      this.serial_no_invalid =false;
+      this.axiosGet("/get-serialnum/" + this.house_lot_no)
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+          this.error.serial_no = "";
+          this.error.house_lot_no = "";
+          this.serial_no_process = false;
+          this.serial_no_done = true;
+          this.house_lot_data = response.data;
+          this.serial_no = this.house_lot_data.serial_num
+          this.house_lot_id = this.house_lot_data.id;
+        }
+      })
+      .catch(({ response }) => {
+        this.serial_no_process = false;
+        this.serial_no_invalid = true;
+        this.error.house_lot_no = "Enter Valid House lot number";
+        this.serial_no = '';
+      });
+    },
   },
   created() {
     this.base_url = window.location.origin;
