@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\HouseLot;
 use App\Models\Admin\WaterMeterReading;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class AdminHouseLotsController extends Controller
 {
     public function index()
     {
-        return view('admin.house_lots.index');
+        $houselots = HouseLot::all();
+        return view('admin.house_lots.index',compact('houselots'));
     }
 
     public function getHouseLotsList()
@@ -28,10 +31,23 @@ class AdminHouseLotsController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'serial_no' => 'required|max:50',
-            'house_lot_no' => 'required|max:50',
+            'house_lot_no' => 'required|unique:house_lot,house_lot_num|max:50'
         ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            if ($errors->get('serial_no')) {
+                Cookie::queue('error_for_create_reading_field', 'Serial no', 10);
+                Cookie::queue('error_for_create_reading', $errors->get('serial_no')[0], 10);
+            }
+            if ($errors->get('house_lot_no')) {
+                Cookie::queue('error_for_create_reading_field', 'House lot no', 10);
+                Cookie::queue('error_for_create_reading', $errors->get('house_lot_no')[0], 10);
+            }
+            return json_encode('error');
+        }
 
         $houselot = HouseLot::create([
             'serial_num' => $request->serial_no,
@@ -51,10 +67,27 @@ class AdminHouseLotsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
+        // $validated = $request->validate([
+        //     'serial_no' => 'required|max:50',
+        //     'house_lot_no' => 'required|unique:branch,house_lot_no|max:50'
+        // ]);
+        $validator = Validator::make($request->all(), [
             'serial_no' => 'required|max:50',
-            'house_lot_no' => 'required|max:50'
+            'house_lot_no' => 'required|unique:house_lot,house_lot_num|max:50'
         ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            if ($errors->get('serial_no')) {
+                Cookie::queue('error_for_create_reading_field', 'Serial no', 10);
+                Cookie::queue('error_for_create_reading', $errors->get('serial_no')[0], 10);
+            }
+            if ($errors->get('house_lot_no')) {
+                Cookie::queue('error_for_create_reading_field', 'House lot no', 10);
+                Cookie::queue('error_for_create_reading', $errors->get('house_lot_no')[0], 10);
+            }
+            return json_encode('error');
+        }
 
         $houselot = HouseLot::find($id);
         $updated = $houselot->update([
@@ -76,8 +109,10 @@ class AdminHouseLotsController extends Controller
     {
         $deleted = HouseLot::find($id)->delete();
         if ($deleted) {
-            return json_encode(true);
+            Cookie::queue('delete_record_from_table', 'House Lot', 10);
+            return redirect()->back();
         }
-        return json_encode(false);
+        Cookie::queue('not_delete_record_from_table', 'House Lot', 10);
+        return redirect()->back();
     }
 }

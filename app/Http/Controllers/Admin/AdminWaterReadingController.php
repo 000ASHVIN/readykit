@@ -21,7 +21,8 @@ class AdminWaterReadingController extends Controller
     protected $pdfmaker;
     public function index()
     {
-        return view('admin.water_readings.index');
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot', 'user'])->get();
+        return view('admin.water_readings.index',compact('water_readings'));
     }
 
     public function getWaterReadingsList()
@@ -190,9 +191,11 @@ class AdminWaterReadingController extends Controller
         }
         $deleted = $reading->delete();
         if ($deleted) {
-            return json_encode(true);
+            Cookie::queue('delete_record_from_table', 'Water Reading', 10);
+            return redirect()->back();
         }
-        return json_encode(false);
+        Cookie::queue('not_delete_record_from_table', 'Water Reading', 10);
+        return redirect()->back();
     }
 
     public function getReadingInfo($id){

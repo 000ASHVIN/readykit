@@ -21,17 +21,23 @@
         window.user = <?php echo auth()->user(); ?>;
     </script>
     @endif
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
-    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script> -->
+
     {!! script('https://js.stripe.com/v3/') !!}
     {!! script(mix('js/manifest.js')) !!}
     {!! script(mix('js/vendor.js')) !!}
     {!! script(mix('js/core.js')) !!}
     {!! script('vendor/summernote/summernote-bs4.js') !!}
 
-
-
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#water_reading_table').DataTable();
+            $('#branches_table').DataTable();
+            $('#house_lots_table').DataTable();
+            $('#users_table').DataTable();
+        });
+    </script>
     @stack('after-scripts')
 </footer>

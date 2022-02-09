@@ -105,11 +105,15 @@ export default {
         }
         this.axiosPost({url,data:payload})
         .then((response) => {
-          if(response.data){
+          if(response.data == true){
               this.$alert("House Lot created !!");
               window.location.replace('/admin/houselots');
           }
-          else{
+          if(response.data == 'error'){
+              // this.$alert("House Lot created !!");
+              window.location.replace('/admin/houselots/create');
+          }
+          if(response.data == false){
               this.$alert("There's Problem creating House Lot !!");
           }
         })

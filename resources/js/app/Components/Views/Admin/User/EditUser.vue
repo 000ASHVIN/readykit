@@ -273,7 +273,7 @@ export default {
         });
       },
       getBranches(){
-        this.axiosGet("/admin/get-branches")
+        this.axiosGet("/admin/get-branches-for-form")
         .then((response) => {
           this.branches = response.data;
         })

@@ -6,17 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\Branch;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 class AdminBranchesController extends Controller
 {
     public function index()
     {
-        return view('admin.branches.index');
+        $branches = Branch::all();
+        return view('admin.branches.index',compact('branches'));
     }
 
     public function getBranchesList()
     {
         $users = Branch::paginate(10);
+        return json_encode($users);
+    }
+
+    public function getBranchesForFormList()
+    {
+        $users = Branch::all();
         return json_encode($users);
     }
 
@@ -68,8 +76,10 @@ class AdminBranchesController extends Controller
     {
         $deleted = Branch::find($id)->delete();
         if ($deleted) {
-            return json_encode(true);
+            Cookie::queue('delete_record_from_table', 'Branch', 10);
+            return redirect()->back();
         }
-        return json_encode(false);
+        Cookie::queue('not_delete_record_from_table', 'Branch', 10);
+        return redirect()->back();
     }
 }
