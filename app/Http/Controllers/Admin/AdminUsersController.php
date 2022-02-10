@@ -7,12 +7,18 @@ use App\Models\Core\Auth\Role;
 use App\Models\Core\Auth\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 
 class AdminUsersController extends Controller
 {
     public function index(){
-        return view('admin.users.index');
+        $users = User::all();
+        return view('admin.users.index',compact('users'));
+    }
+
+    public function getRoles(){
+        return Role::all();
     }
 
     public function getUser($id){
@@ -20,6 +26,11 @@ class AdminUsersController extends Controller
     }
 
     public function getUsersList(){
+        $users = User::paginate(10);
+        // dd($users);
+        return json_encode($users);
+    }
+    public function getUsersForFormList(){
         $users = User::all();
         return json_encode($users);
     }
@@ -95,9 +106,11 @@ class AdminUsersController extends Controller
     public function delete($id){
         $deleted = User::find($id)->delete();
         if($deleted){
-            return json_encode(true);
+            Cookie::queue('delete_record_from_table', 'User', 10);
+            return redirect()->back();
         }
-        return json_encode(false);
+        Cookie::queue('not_delete_record_from_table', 'User', 10);
+        return redirect()->back();
     }
 
 }

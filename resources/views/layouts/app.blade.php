@@ -64,6 +64,33 @@
     ?>
     @endif
 
+    @if( Cookie::has('delete_record_from_table') )
+    <script>
+        swal({
+            title: "{{ Cookie::get('delete_record_from_table').' Deleted!!' }}",
+            icon: "success",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['delete_record_from_table']);
+    setcookie('delete_record_from_table', null, -1, '/');
+    ?>
+    @endif
+    @if( Cookie::has('not_delete_record_from_table') )
+    <script>
+        swal({
+            title: "{{ 'Problem in deleting '.Cookie::get('not_delete_record_from_table') }}",
+            icon: "error",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['not_delete_record_from_table']);
+    setcookie('not_delete_record_from_table', null, -1, '/');
+    ?>
+    @endif
+
     @if( Cookie::has('reading_created') && Cookie::get('reading_created') )
     <script>
         swal({

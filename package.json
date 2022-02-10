@@ -83,6 +83,7 @@
         "dropzone": "5.7.0",
         "feather-icons": "^4.26.0",
         "fecha": "^4.1.0",
+        "laravel-vue-pagination": "^2.3.1",
         "moment": "^2.24.0",
         "nouislider": "^14.1.1",
         "v-calendar": "^2.1.1",
@@ -96,6 +97,7 @@
         "vue-tel-input": "^4.3.0",
         "vue-toastr": "^2.1.2",
         "vuedraggable": "^2.23.2",
+        "vuejs-datatable": "^2.0.0-alpha.7",
         "vuex": "^3.1.2",
         "vuex-i18n": "^1.13.1"
     }

@@ -47,7 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="branch in branches" :key="branch.id">
+            <tr v-for="branch in branches.data" :key="branch.id">
               <td data-title="id" class="datatable-td">
                 <span class=""> {{ branch.id }} </span>
               </td>
@@ -82,6 +82,7 @@
         </table>
         <!---->
       </div>
+      <pagination align="right" :data="branches" @pagination-change-page="getBranches" style=" margin-top: 10px;"></pagination>
       <!-- <div class="p-primary">
         <div>
           <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -225,20 +226,23 @@
 
 <script>
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
+import pagination from 'laravel-vue-pagination';
 export default {
   name: "Branches",
   mixins: [FormMixin],
-  components: {},
+  components: {
+    pagination
+  },
   data() {
     return {
-      branches: [],
+      branches: {},
       fetching : false,
       base_url:''
     };
   },
   methods: {
-    getBranches() {
-      this.axiosGet("/admin/get-branches")
+    async getBranches(page=1) {
+      this.axiosGet(`/admin/get-branches?page=${page}`)
         .then((response) => {
           this.branches = response.data;
           this.fetching = false;
@@ -279,3 +283,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.pagination .page-item .page-link{
+  border: none !important;
+}
+.pagination .page-item.active{
+  color: #5b74f2 !important;
+}
+</style>

@@ -50,7 +50,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.id">
+            <tr v-for="user in users.data" :key="user.id">
               <td data-title="id" class="datatable-td">
                 <span class=""> {{ user.id }} </span>
               </td>
@@ -97,7 +97,8 @@
         </table>
         <!---->
       </div>
-      <!-- <div class="p-primary">
+      <pagination align="right" :data="users" @pagination-change-page="getUsers" style=" margin-top: 10px;"></pagination>
+       <!-- <div class="p-primary">
         <div>
           <div class="d-flex flex-column flex-md-row justify-content-between">
             <div
@@ -233,27 +234,30 @@
             </nav>
           </div>
         </div>
-      </div> -->
+      </div>  -->
     </div>
   </div>
 </template>
 
 <script>
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
+import pagination from 'laravel-vue-pagination';
 export default {
   name: "Users",
   mixins: [FormMixin],
-  components: {},
+  components: {
+    pagination
+  },
   data() {
     return {
-      users: [],
+      users: {},
       fetching:false,
       base_url:''
     };
   },
   methods: {
-    getUsers() {
-      this.axiosGet("/admin/get-users")
+    async getUsers(page=1) {
+      this.axiosGet(`/admin/get-users?page=${page}`)
         .then((response) => {
           this.users = response.data;
           this.fetching = false;

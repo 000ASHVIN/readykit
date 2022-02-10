@@ -21,13 +21,14 @@ class AdminWaterReadingController extends Controller
     protected $pdfmaker;
     public function index()
     {
-        return view('admin.water_readings.index');
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot', 'user'])->get();
+        return view('admin.water_readings.index',compact('water_readings'));
     }
 
     public function getWaterReadingsList()
     {
-        $water_readings = WaterMeterReading::with(['branch', 'house_lot','user'])->get();
-        return json_encode($water_readings);
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot','user'])->paginate(10);
+        return response()->json($water_readings);
     }
 
     public function create_view()
@@ -103,12 +104,14 @@ class AdminWaterReadingController extends Controller
 
     public function edit($id)
     {
-        $water_reading = WaterMeterReading::find($id);
+        $water_reading = WaterMeterReading::with(['branch', 'house_lot', 'user'])->where('id',$id)->first();
+        // dd($water_reading);
         return view('admin.water_readings.edit', compact('water_reading'));
     }
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'image' => 'image:jpg,jpeg,png',
             'current_reading' => 'required|max:50',
@@ -188,9 +191,11 @@ class AdminWaterReadingController extends Controller
         }
         $deleted = $reading->delete();
         if ($deleted) {
-            return json_encode(true);
+            Cookie::queue('delete_record_from_table', 'Water Reading', 10);
+            return redirect()->back();
         }
-        return json_encode(false);
+        Cookie::queue('not_delete_record_from_table', 'Water Reading', 10);
+        return redirect()->back();
     }
 
     public function getReadingInfo($id){

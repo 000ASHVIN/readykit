@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { WindowScrollController } from '@fullcalendar/common';
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
 export default {
   name: "EditHouseLot",
@@ -115,12 +116,16 @@ export default {
         }
         this.axiosPost({url,data:payload})
         .then((response) => {
-          if(response.data){
+          if(response.data == true){
               this.$alert("House Lot Updated !!");
               window.location.replace('/admin/houselots');
           }
-          else{
-              this.$alert("There's Problem updating House Lot !!");
+          if(response.data == 'error'){
+              // this.$alert("House Lot created !!");
+              window.location.replace(window.location.href);
+          }
+          if(response.data == false){
+              this.$alert("There's Problem creating House Lot !!");
           }
         })
         .catch(({ response }) => {

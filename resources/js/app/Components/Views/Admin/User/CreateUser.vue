@@ -282,7 +282,7 @@ export default {
         });
       },
       getBranches(){
-        this.axiosGet("/admin/get-branches")
+        this.axiosGet("/admin/get-branches-for-form")
         .then((response) => {
           this.branches = response.data;
         })
@@ -291,10 +291,10 @@ export default {
         });
       },
       getRoles(){
-        this.axiosGet("/admin/auth/roles")
+        this.axiosGet("/admin/get-roles")
         .then((response) => {
-          this.roles = response.data.data;
-          console.log(this.roles);
+          this.roles = response.data;
+          
         })
         .catch(({ response }) => {
           console.log(response);

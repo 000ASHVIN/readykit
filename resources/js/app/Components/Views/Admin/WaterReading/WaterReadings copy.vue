@@ -135,7 +135,143 @@
         <!---->
       </div>
       <pagination align="right" :data="water_readings" @pagination-change-page="getWaterReadings" style=" margin-top: 10px;"></pagination>
-       
+       <!-- <div class="p-primary">
+        <div>
+          <div class="d-flex flex-column flex-md-row justify-content-between">
+            <div
+              class="
+                dropdown-menu-filter
+                d-flex
+                align-items-center
+                justify-content-center justify-content-md-start
+              "
+            >
+              <div class="dropdown keep-inside-clicks-open">
+                <button
+                  type="button"
+                  id="show-pagination-responsive-table"
+                  data-toggle="dropdown"
+                  class="btn btn-filter"
+                >
+                  10
+                  <img
+                    src="http://127.0.0.1:8000/images/chevron-down.svg"
+                    alt=""
+                    style="height: 16px; width: 16px"
+                  />
+                </button>
+                <div
+                  aria-labelledby="show-pagination-responsive-table"
+                  class="my-2 dropdown-menu dropdown-menu-responsive-table"
+                >
+                  <a href="#" class="dropdown-item active disabled"> 10 </a
+                  ><a href="#" class="dropdown-item"> 20 </a
+                  ><a href="#" class="dropdown-item"> 30 </a>
+                </div>
+              </div>
+              <label class="text-muted ml-2 mb-0">Items showing per page</label>
+            </div>
+            <nav data-v-1ab5eeaf="" style="">
+              <ul
+                data-v-1ab5eeaf=""
+                class="
+                  pagination
+                  justify-content-center justify-content-md-end
+                  mb-0
+                "
+              >
+                <li data-v-1ab5eeaf="" class="d-flex align-items-center mr-3">
+                  <p data-v-1ab5eeaf="" class="text-muted mb-0 mr-2">
+                    Go to page
+                  </p>
+                  <input
+                    data-v-1ab5eeaf=""
+                    type="text"
+                    class="form-control width-50"
+                  />
+                </li>
+                <li data-v-1ab5eeaf="" class="page-item disabled">
+                  <a
+                    data-v-1ab5eeaf=""
+                    href="#"
+                    aria-label="Previous"
+                    class="page-link border-0"
+                    ><span data-v-1ab5eeaf=""
+                      ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-arrow-left menu-arrow"
+                        data-v-1ab5eeaf=""
+                      >
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline
+                          points="12 19 5 12 12 5"
+                        ></polyline></svg></span
+                  ></a>
+                </li>
+                <li data-v-1ab5eeaf="" class="page-item">
+                  <a
+                    data-v-1ab5eeaf=""
+                    href="#"
+                    class="page-link border-0 active disabled"
+                    >1</a
+                  >
+                </li>
+                <li data-v-1ab5eeaf="" class="page-item">
+                  <a data-v-1ab5eeaf="" href="#" class="page-link border-0"
+                    >2</a
+                  >
+                </li>
+                <li data-v-1ab5eeaf="" class="page-item">
+                  <a data-v-1ab5eeaf="" href="#" class="page-link border-0"
+                    >3</a
+                  >
+                </li>
+                <li data-v-1ab5eeaf="" class="page-item">
+                  <a data-v-1ab5eeaf="" href="#" class="page-link border-0"
+                    >4</a
+                  >
+                </li>
+                <li data-v-1ab5eeaf="" class="page-item">
+                  <a data-v-1ab5eeaf="" href="#" class="page-link border-0"
+                    >5</a
+                  >
+                </li>
+                <li data-v-1ab5eeaf="" class="page-item">
+                  <a
+                    data-v-1ab5eeaf=""
+                    href="#"
+                    aria-label="Next"
+                    class="page-link border-0 align-content-center"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="feather feather-arrow-right menu-arrow"
+                      data-v-1ab5eeaf=""
+                    >
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline></svg
+                  ></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>   -->
     </div>
   </div>
 </template>
