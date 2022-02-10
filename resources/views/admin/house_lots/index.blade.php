@@ -40,10 +40,10 @@
                 <tbody>
                     @foreach($houselots as $houselot)
                     <tr>
-                        <td>{{$houselot->id }}</td>
-                        <td>{{$houselot->serial_num }}</td>
-                        <td>{{$houselot->house_lot_num }}</td>
-                        <td>{{ date('Y/m/d',strtotime($houselot->created_at)) }}</td>
+                        <td class="datatable-td">{{$houselot->id }}</td>
+                        <td class="datatable-td">{{$houselot->serial_num }}</td>
+                        <td class="datatable-td">{{$houselot->house_lot_num }}</td>
+                        <td class="datatable-td">{{ date('Y/m/d',strtotime($houselot->created_at)) }}</td>
                         <td class="datatable-td" style="display: flex;"><a href="{{ route('admin.houselot-edit',$houselot->id) }}" type="button" class="btn btn-primary table-btn mr-2 mb-2 mb-sm-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>

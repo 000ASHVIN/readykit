@@ -71,9 +71,10 @@ class AdminHouseLotsController extends Controller
         //     'serial_no' => 'required|max:50',
         //     'house_lot_no' => 'required|unique:branch,house_lot_no|max:50'
         // ]);
+        
         $validator = Validator::make($request->all(), [
             'serial_no' => 'required|max:50',
-            'house_lot_no' => 'required|unique:house_lot,house_lot_num|max:50'
+            'house_lot_no' => 'required|max:50|unique:house_lot,house_lot_num,'.$id
         ]);
 
         if ($validator->fails()) {
