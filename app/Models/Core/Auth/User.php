@@ -15,6 +15,7 @@ use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Admin\WaterMeterReading;
 
 
 class User extends BaseUser implements HasLocalePreference

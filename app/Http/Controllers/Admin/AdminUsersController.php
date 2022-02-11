@@ -104,8 +104,13 @@ class AdminUsersController extends Controller
     }
 
     public function delete($id){
-        $deleted = User::find($id)->delete();
-        if($deleted){
+        $deleted = User::with('water_readings')->find($id);
+        if(count($deleted->water_readings) > 0){
+            Cookie::queue('not_delete_user_record_from_table', true, 10);
+            return redirect()->back();
+        }
+        $delete = $deleted->delete();
+        if($delete){
             Cookie::queue('delete_record_from_table', 'User', 10);
             return redirect()->back();
         }
