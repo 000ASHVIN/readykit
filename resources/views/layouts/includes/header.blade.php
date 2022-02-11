@@ -37,5 +37,15 @@
     .pagniation .page-item.next {
         margin-left: 50px !important;
     }
+
+    .previous a.page-link {
+        /* margin-left: 8px !important; */
+        margin-right: 19px !important;
+    }
+
+
+    #water_reading_table_previous {
+        margin-right: 10px !important;
+    }
 </style>
 @stack('after-styles')
