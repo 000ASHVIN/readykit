@@ -90,6 +90,19 @@
     setcookie('not_delete_record_from_table', null, -1, '/');
     ?>
     @endif
+    @if( Cookie::has('not_delete_user_record_from_table') )
+    <script>
+        swal({
+            title: "This User has some water tank reading records are available, so you can not delete this user",
+            icon: "error",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['not_delete_user_record_from_table']);
+    setcookie('not_delete_user_record_from_table', null, -1, '/');
+    ?>
+    @endif
 
     @if( Cookie::has('reading_created') && Cookie::get('reading_created') )
     <script>
