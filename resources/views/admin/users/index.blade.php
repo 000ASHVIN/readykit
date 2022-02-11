@@ -41,10 +41,10 @@
                 <tbody>
                     @foreach($users as $user)
                     <tr>
-                        <td>{{$user->id }}</td>
-                        <td>{{$user->full_name }}</td>
-                        <td>{{$user->email }}</td>
-                        <td>{{$user->status_id == 1 ?'Active': 'Inactive' }}</td>
+                        <td class="datatable-td">{{$user->id }}</td>
+                        <td class="datatable-td">{{$user->full_name }}</td>
+                        <td class="datatable-td">{{$user->email }}</td>
+                        <td class="datatable-td">{{$user->status_id == 1 ?'Active': 'Inactive' }}</td>
                         <td class="datatable-td" style="display: flex;"><a href="{{ route('admin.user-edit',$user->id) }}" type="button" class="btn btn-primary table-btn mr-2 mb-2 mb-sm-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>

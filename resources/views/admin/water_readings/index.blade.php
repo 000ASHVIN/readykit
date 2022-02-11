@@ -63,14 +63,14 @@
                 <tbody>
                     @foreach($water_readings as $reading)
                     <tr>
-                        <td>{{$reading->house_lot->house_lot_num }}</td>
-                        <td>{{$reading->branch->name }}</td>
-                        <td>{{$reading->serial_num }}</td>
-                        <td>{{$reading->current_reading ? (strlen($reading->current_reading) > 5 ? substr($reading->current_reading, 0, 5).'..' : $reading->current_reading ): 'N/A'  }}</td>
-                        <td>{{$reading->last_reading ? (strlen($reading->last_reading) > 5 ? substr($reading->last_reading, 0, 5).'..' : $reading->last_reading ): 'N/A'  }}</td>
-                        <td>{{ date('Y/m/d',strtotime($reading->created_at)) }}</td>
-                        <td class="avatars-w-50"><img class="rounded-circle" src="{{ asset('storage\images\meter_readings\\'.$reading->image) }}" alt="parth"></td>
-                        <td>{{$reading->user->first_name }}</td>
+                        <td class="datatable-td">{{$reading->house_lot->house_lot_num }}</td>
+                        <td class="datatable-td">{{$reading->branch->name }}</td>
+                        <td class="datatable-td">{{$reading->serial_num }}</td>
+                        <td class="datatable-td">{{$reading->current_reading ? (strlen($reading->current_reading) > 5 ? substr($reading->current_reading, 0, 5).'..' : $reading->current_reading ): 'N/A'  }}</td>
+                        <td class="datatable-td">{{$reading->last_reading ? (strlen($reading->last_reading) > 5 ? substr($reading->last_reading, 0, 5).'..' : $reading->last_reading ): 'N/A'  }}</td>
+                        <td class="datatable-td">{{ date('Y/m/d',strtotime($reading->created_at)) }}</td>
+                        <td class="avatars-w-50 datatable-td"><img class="rounded-circle" src="{{ asset('storage\images\meter_readings\\'.$reading->image) }}" alt="parth"></td>
+                        <td class="datatable-td">{{ $reading->user ? $reading->user->first_name : 'N/A' }}</td>
                         <td class="datatable-td" style="display: flex;"><a href="{{ route('admin.water_reading-edit',$reading->id) }}" type="button" class="btn btn-primary table-btn mr-2 mb-2 mb-sm-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>

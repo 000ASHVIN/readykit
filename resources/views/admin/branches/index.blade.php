@@ -6,7 +6,7 @@
 <div class="content-wrapper">
     <div class="row" style="margin-bottom: 30px;">
         <div class="col-sm-12 col-md-12">
-                        <h2 class="mb-0">Branches</h2>
+            <h2 class="mb-0">Branches</h2>
         </div>
     </div>
     <div class="datatable">
@@ -37,9 +37,9 @@
                 <tbody>
                     @foreach($branches as $branch)
                     <tr>
-                        <td>{{$branch->id }}</td>
-                        <td>{{$branch->name }}</td>
-                        <td>{{ date('Y/m/d',strtotime($branch->created_at)) }}</td>
+                        <td class="datatable-td">{{$branch->id }}</td>
+                        <td class="datatable-td">{{$branch->name }}</td>
+                        <td class="datatable-td">{{ date('Y/m/d',strtotime($branch->created_at)) }}</td>
                         <td class="datatable-td" style="display: flex;"><a href="{{ route('admin.branch-edit',$branch->id) }}" type="button" class="btn btn-primary table-btn mr-2 mb-2 mb-sm-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
