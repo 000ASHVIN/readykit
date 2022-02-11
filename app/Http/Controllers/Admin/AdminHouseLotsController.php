@@ -33,7 +33,8 @@ class AdminHouseLotsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'serial_no' => 'required|max:50',
-            'house_lot_no' => 'required|unique:house_lot,house_lot_num|max:50'
+            'house_lot_no' => 'required|unique:house_lot,house_lot_num|max:50',
+            'branch' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -46,12 +47,17 @@ class AdminHouseLotsController extends Controller
                 Cookie::queue('error_for_create_reading_field', 'House lot no', 10);
                 Cookie::queue('error_for_create_reading', $errors->get('house_lot_no')[0], 10);
             }
+            if ($errors->get('branch')) {
+                Cookie::queue('error_for_create_reading_field', 'Branch', 10);
+                Cookie::queue('error_for_create_reading', $errors->get('branch')[0], 10);
+            }
             return json_encode('error');
         }
 
         $houselot = HouseLot::create([
             'serial_num' => $request->serial_no,
             'house_lot_num' => $request->house_lot_no,
+            'branch_id' => $request->branch
         ]);
         if (!$houselot) {
             return json_encode(false);

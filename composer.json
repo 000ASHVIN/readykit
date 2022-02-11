@@ -24,7 +24,8 @@
         "paypal/rest-api-sdk-php": "*",
         "pusher/pusher-php-server": "^4.1",
         "spatie/laravel-activitylog": "^3.9",
-        "stripe/stripe-php": "^7.77"
+        "stripe/stripe-php": "^7.77",
+        "yajra/laravel-datatables-oracle": "^9.19"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

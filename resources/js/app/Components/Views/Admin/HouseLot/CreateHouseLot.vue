@@ -8,6 +8,29 @@
           </div>
           <div class="card-body">
             <form class="mb-0">
+
+              <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> Branch </label>
+                <div class="col-md-8">
+                  <select
+                    id="inputs_status"
+                    class="custom-select"
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
+                    v-model="branch"
+                  >
+                    <option value="">Select Branch</option>
+                    <option :value="branch.id" v-for="branch in branches" :key="branch.id"> {{ branch.name }}</option>
+                  </select>
+                  <div>
+                    <small class="text-danger validation-error" v-if="this.error.branch">
+                      {{ this.error.branch }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
               <div class="form-group row align-items-center">
                 <label class="col-md-2 mb-md-0"> Serial No </label>
                 <div class="col-md-8">
@@ -70,6 +93,9 @@ export default {
         id:'',
         serial_no:'',
         house_lot_no:'',
+        branch: '',
+        branches: [],
+        dropDownImage: '',
         error:{
           serial_no:'',
           house_lot_no:''
@@ -91,7 +117,20 @@ export default {
           is_error = true;
           this.error.serial_no = "Serial number is required";
         }
+        if(this.branch == "" && !this.branch){
+          is_error = true;
+          this.error.branch = "Branch is required";
+        }
         return is_error;
+      },
+      getBranches(){
+        this.axiosGet("/admin/get-branches-for-form")
+        .then((response) => {
+          this.branches = response.data;
+        })
+        .catch(({error}) => {
+          console.log(error);
+        });
       },
       async createHouseLot(){
         this.clearErrors();
@@ -102,6 +141,7 @@ export default {
         payload = {
         serial_no : this.serial_no,
         house_lot_no : this.house_lot_no,
+        branch: this.branch
         }
         this.axiosPost({url,data:payload})
         .then((response) => {
@@ -118,16 +158,23 @@ export default {
           }
         })
         .catch(({ response }) => {
-          if(response.status == 422 ){
+          if(response && response.status == 422 ){
             if(response.data.errors.serial_no){
               this.$toastr.e(response.data.errors.serial_no);
             }
             if(response.data.errors.house_lot_no){
               this.$toastr.e(response.data.errors.house_lot_no);
             }
+            if(response.data.errors.branch){
+              this.$toastr.e(response.data.errors.branch);
+            }
           }
         });
       }
   },
+  created() {
+    this.dropDownImage = window.location.origin+'/images/chevron-down.svg';
+    this.getBranches();
+  }
 };
 </script>

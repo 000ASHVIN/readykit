@@ -16,4 +16,8 @@ class Branch extends Model
     public function water_readings(){
         return $this->hasMany(WaterMeterReading::class);
     }
+
+    public function HouseLot() {
+        return $this->hasMany(HouseLot::class, 'branch_id', 'id');
+    }
 }
