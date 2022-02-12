@@ -30,6 +30,9 @@
                             <span class="font-size-default"><span> House Lot </span></span>
                         </th>
                         <th track-by="2" class="datatable-th pt-0">
+                            <span class="font-size-default"><span> Branch </span></span>
+                        </th>
+                        <th track-by="2" class="datatable-th pt-0">
                             <span class="font-size-default"><span> Created on </span></span>
                         </th>
                         <th track-by="4" class="datatable-th pt-0">
@@ -43,6 +46,7 @@
                         <td class="datatable-td">{{$houselot->id }}</td>
                         <td class="datatable-td">{{$houselot->serial_num }}</td>
                         <td class="datatable-td">{{$houselot->house_lot_num }}</td>
+                        <td class="datatable-td">{{$houselot->branch ? $houselot->branch->name : "N/A" }}</td>
                         <td class="datatable-td">{{ date('Y/m/d',strtotime($houselot->created_at)) }}</td>
                         <td class="datatable-td" style="display: flex;"><a href="{{ route('admin.houselot-edit',$houselot->id) }}" type="button" class="btn btn-primary table-btn mr-2 mb-2 mb-sm-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">

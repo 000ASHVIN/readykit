@@ -90,6 +90,7 @@
     setcookie('not_delete_record_from_table', null, -1, '/');
     ?>
     @endif
+
     @if( Cookie::has('not_delete_user_record_from_table') )
     <script>
         swal({
@@ -101,6 +102,34 @@
     <?php
     unset($_COOKIE['not_delete_user_record_from_table']);
     setcookie('not_delete_user_record_from_table', null, -1, '/');
+    ?>
+    @endif
+
+    @if( Cookie::has('not_delete_houselot_record_from_table') )
+    <script>
+        swal({
+            title: "This House Lot is linked with some water tank reading records, so you can not delete this record",
+            icon: "error",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['not_delete_houselot_record_from_table']);
+    setcookie('not_delete_houselot_record_from_table', null, -1, '/');
+    ?>
+    @endif
+
+    @if( Cookie::has('not_delete_branch_record_from_table') )
+    <script>
+        swal({
+            title: "This Branch is linked with some user or house lots, so you can not delete this record",
+            icon: "error",
+            button: "Okay",
+        });
+    </script>
+    <?php
+    unset($_COOKIE['not_delete_branch_record_from_table']);
+    setcookie('not_delete_branch_record_from_table', null, -1, '/');
     ?>
     @endif
 

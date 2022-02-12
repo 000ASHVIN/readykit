@@ -9,6 +9,28 @@
           <div class="card-body">
             <form class="mb-0">
               <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> Branch </label>
+                <div class="col-md-8">
+                  <select
+                    id="inputs_status"
+                    class="custom-select"
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
+                    v-model="branch_id"
+                  >
+                    <option value="">Select Branch</option>
+                    <option :value="branch.id" v-for="branch in branches" :key="branch.id" :selected="branch.id == branch_id"> {{ branch.name }}</option>
+                  </select>
+                  <div>
+                    <small class="text-danger validation-error" v-if="this.error.branch">
+                      {{ this.error.branch }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row align-items-center">
                 <label class="col-md-2 mb-md-0"> Serial No </label>
                 <div class="col-md-8">
                   <input
@@ -77,6 +99,9 @@ export default {
         id:'',
         serial_no:'',
         house_lot_no:'',
+        branch_id: '',
+        branches: [],
+        dropDownImage: '',
         error:{
           serial_no:'',
           house_lot_no:''
@@ -92,6 +117,7 @@ export default {
           this.id=this.houselot.id;
           this.serial_no=this.houselot.serial_num;
           this.house_lot_no=this.houselot.house_lot_num;
+          this.branch_id = this.houselot.branch_id;
       },
       checkValidation(){
         let is_error = false;
@@ -112,7 +138,8 @@ export default {
         }
         let url = "/admin/houselots/"+this.id+"/update",payload = {
         serial_no:this.serial_no,
-        house_lot_no:this.house_lot_no
+        house_lot_no:this.house_lot_no,
+        branch: this.branch_id
         }
         this.axiosPost({url,data:payload})
         .then((response) => {
@@ -138,9 +165,20 @@ export default {
             }
           }
         });
-      }
+      },
+      async getBranches(){
+        await this.axiosGet("/admin/get-branches-for-form")
+        .then((response) => {
+          this.branches = response.data;
+        })
+        .catch(({error}) => {
+          console.log(error);
+        });
+      },
   },
   created() {
+      this.dropDownImage = window.location.origin+'/images/chevron-down.svg'; 
+      this.getBranches();
       this.setHouseLot();
   },
 };

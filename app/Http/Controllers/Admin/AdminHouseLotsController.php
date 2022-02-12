@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Branch;
 use App\Models\Admin\HouseLot;
 use App\Models\Admin\WaterMeterReading;
 use Carbon\Carbon;
@@ -80,7 +81,8 @@ class AdminHouseLotsController extends Controller
         
         $validator = Validator::make($request->all(), [
             'serial_no' => 'required|max:50',
-            'house_lot_no' => 'required|max:50|unique:house_lot,house_lot_num,'.$id
+            'house_lot_no' => 'required|max:50|unique:house_lot,house_lot_num,'.$id,
+            'branch' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -93,6 +95,10 @@ class AdminHouseLotsController extends Controller
                 Cookie::queue('error_for_create_reading_field', 'House lot no', 10);
                 Cookie::queue('error_for_create_reading', $errors->get('house_lot_no')[0], 10);
             }
+            if ($errors->get('branch')) {
+                Cookie::queue('error_for_create_reading_field', 'Branch', 10);
+                Cookie::queue('error_for_create_reading', $errors->get('branch')[0], 10);
+            }
             return json_encode('error');
         }
 
@@ -100,6 +106,7 @@ class AdminHouseLotsController extends Controller
         $updated = $houselot->update([
             'serial_num' => $request->serial_no,
             'house_lot_num' => $request->house_lot_no,
+            'branch_id' => $request->branch,
             'updated_at' => Carbon::now()
         ]);
         $update_reading = WaterMeterReading::where('house_lot_id', $houselot->id)->update([
@@ -114,7 +121,12 @@ class AdminHouseLotsController extends Controller
 
     public function delete($id)
     {
-        $deleted = HouseLot::find($id)->delete();
+        $houseLot = HouseLot::find($id);
+        if(count($houseLot->water_readings) > 0) {
+            Cookie::queue('not_delete_houselot_record_from_table', true, 10);
+            return redirect()->back();
+        }
+        $deleted = $houseLot->delete();
         if ($deleted) {
             Cookie::queue('delete_record_from_table', 'House Lot', 10);
             return redirect()->back();

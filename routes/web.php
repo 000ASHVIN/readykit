@@ -108,6 +108,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('show-reading/{id}',[WaterTankReadingsController::class,'showReading'])->name('show-reading');
     Route::get('edit-reading/{id}', [WaterTankReadingsController::class, 'editReading'])->name('edit-reading');
     Route::post('update-reading/{id}', [WaterTankReadingsController::class, 'update'])->name('update.reading');
+
+    Route::get('branch/{id}/house_lots', [BranchController::class, 'getHouseLotsList'])->name('branch.houselot.list');
 });
 
 /**
@@ -158,7 +160,12 @@ Route::any('symlink', [SymlinkController::class, 'run'])
  * See @var PermissionMiddleware for more information
  */
 
- Route::get('call/migrate', function() {
+Route::get('call/migrate', function() {
+    Artisan::call('migrate');
+    echo "done";
+ });
+
+ Route::get('call/migrate/fresh', function() {
     Artisan::call('migrate:fresh');
     Artisan::call('db:seed');
     echo "done";

@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Core\Auth\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +18,11 @@ class Branch extends Model
         return $this->hasMany(WaterMeterReading::class);
     }
 
-    public function HouseLot() {
+    public function houseLot() {
         return $this->hasMany(HouseLot::class, 'branch_id', 'id');
+    }
+
+    public function users() {
+        return $this->hasMany(User::class, 'branch_id', 'id');
     }
 }

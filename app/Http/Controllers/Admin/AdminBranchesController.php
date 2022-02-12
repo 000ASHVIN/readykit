@@ -39,10 +39,10 @@ class AdminBranchesController extends Controller
             'name' => 'required|max:50'
         ]);
 
-        $user = Branch::create([
+        $branch = Branch::create([
             'name' => $request->name
         ]);
-        if(!$user){
+        if(!$branch){
             return json_encode(false);
         }
         return json_encode(true);
@@ -74,7 +74,13 @@ class AdminBranchesController extends Controller
 
     public function delete($id)
     {
-        $deleted = Branch::find($id)->delete();
+        $branch = Branch::find($id);
+
+        if(count($branch->houseLot) > 0 || count($branch->users) > 0) {
+            Cookie::queue('not_delete_branch_record_from_table', true, 10);
+            return redirect()->back();
+        }
+        $deleted = $branch->delete();
         if ($deleted) {
             Cookie::queue('delete_record_from_table', 'Branch', 10);
             return redirect()->back();

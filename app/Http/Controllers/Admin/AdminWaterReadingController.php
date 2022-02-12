@@ -243,4 +243,6 @@ class AdminWaterReadingController extends Controller
         return Excel::download($export, 'Water_readings.xlsx');
 
     }
+
+    // public function get
 }

@@ -22,6 +22,6 @@ class HouseLot extends Model
     }
 
     public function Branch() {
-        return $this->belongsTo(Branch::class, 'id', 'branch_id');
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

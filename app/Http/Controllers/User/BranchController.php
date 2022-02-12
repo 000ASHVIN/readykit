@@ -10,9 +10,18 @@ class BranchController extends Controller
 {
     public function getBranch($id){
         $branch = Branch::find($id);
-        if(!$branch){
+        if(!$branch) {
             return json_encode(false);
         }
         return json_encode($branch);
+    }
+
+    public function getHouseLotsList($id) {
+        $branch = Branch::find($id);
+        if($branch) {
+            $houseLots = $branch->houseLot;
+            return response()->json([$houseLots]);
+        }
+        return json_encode(false);
     }
 }

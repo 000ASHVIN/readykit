@@ -3,6 +3,7 @@
 namespace App\Models\Core\Auth;
 
 use Altek\Eventually\Eventually;
+use App\Models\Admin\Branch;
 use App\Models\Core\Auth\Traits\Attribute\UserAttribute;
 use App\Models\Core\Auth\Traits\Boot\UserBootTrait;
 use App\Models\Core\Auth\Traits\Method\HasRoles;
@@ -71,4 +72,7 @@ class User extends BaseUser implements HasLocalePreference
         ]);
     }
 
+    public function branch() {
+        return $this->hasOne(Branch::class, "id", "branch_id");
+    }
 }

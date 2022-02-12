@@ -63,8 +63,8 @@
                 <tbody>
                     @foreach($water_readings as $reading)
                     <tr>
-                        <td class="datatable-td">{{$reading->house_lot->house_lot_num }}</td>
-                        <td class="datatable-td">{{$reading->branch->name }}</td>
+                        <td class="datatable-td">{{$reading->house_lot ? $reading->house_lot->house_lot_num : 'N/A' }}</td>
+                        <td class="datatable-td">{{$reading->branch ? $reading->branch->name : 'N/A' }}</td>
                         <td class="datatable-td">{{$reading->serial_num }}</td>
                         <td class="datatable-td">{{$reading->current_reading ? (strlen($reading->current_reading) > 5 ? substr($reading->current_reading, 0, 5).'..' : $reading->current_reading ): 'N/A'  }}</td>
                         <td class="datatable-td">{{$reading->last_reading ? (strlen($reading->last_reading) > 5 ? substr($reading->last_reading, 0, 5).'..' : $reading->last_reading ): 'N/A'  }}</td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Branch;
 use App\Models\Core\Auth\Role;
 use App\Models\Core\Auth\User;
 use Carbon\Carbon;

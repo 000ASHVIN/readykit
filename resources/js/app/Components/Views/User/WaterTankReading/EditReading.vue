@@ -43,7 +43,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group row align-items-center">
+              <div class="form-group row align-items-center house-lot-select">
                 <label class="col-md-2 mb-md-0"> House Lot </label>
                 <div class="col-md-8">
                   <input
@@ -58,7 +58,7 @@
                   <img :src="base_url+'/images/Spinner-2.gif'" alt="loadiing.." id="voicebutton" v-if="serial_no_process">
                   <svg v-if="serial_no_done" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle" data-v-5516bb02="" id="verifiedbutton"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                   <svg v-if="serial_no_invalid" id="invalidbutton" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-                  <input
+                  <!-- <input
                     type="text"
                     name="inputs_email"
                     required="required"
@@ -67,7 +67,14 @@
                     class="form-control"
                     v-model="house_lot_no"
                     v-on:change="getSerialNum()"
-                  />
+                  /> -->
+                  <model-select :options="houseLotList"
+                              v-model="house_lot_no"
+                              :isDisabled="houseLotList.length == 0"
+                              :selectedOption="selectedHouseLot"
+                              v-on:change="getSerialNum()"
+                              placeholder="select house lot no.">
+                  </model-select>
                   <div>
                     <small
                       class="text-danger validation-error"
@@ -209,6 +216,8 @@
 
 <script>
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
+import { ModelSelect } from 'vue-search-select';
+
 export default {
   name: "EditReading",
   props: {
@@ -222,7 +231,9 @@ export default {
     },
   },
   mixins: [FormMixin],
-  components: {},
+  components: {
+    ModelSelect
+  },
   data() {
     return {
       branch_data: [],
@@ -237,6 +248,8 @@ export default {
       serial_no_process:false,
       serial_no_done:false,
       serial_no_invalid:false,
+      houseLotList: [],
+      selectedHouseLot: '',
       error: {
         branch: "",
         serial_no: "",
@@ -246,6 +259,11 @@ export default {
         remark: "",
       },
     };
+  },
+  watch: {
+    house_lot_no: function(val) {
+      this.getSerialNum();
+    }
   },
   methods: {
     getUpdateLink() {
@@ -265,6 +283,11 @@ export default {
       this.getSerialNum();
       this.current_reading = this.water_reading.current_reading;
       this.remark = this.water_reading.remark;
+
+      this.selectedHouseLot = {
+        value: this.house_lot_no,
+        text: this.house_lot_num
+      };
     },
     clearErrors() {
       this.error.branch = "";
@@ -292,7 +315,7 @@ export default {
         is_error = true;
         this.error.current_reading = "Current Reading is required";
       }
-      if (this.remark == "" && !this.remark) {
+      if (this.remark == "" || !this.remark) {
         is_error = true;
         this.error.remark = "Remark is required";
       }
@@ -304,12 +327,14 @@ export default {
         $("#update-reading-form").submit();
       }
     },
-    getBranch(id) {
-      this.axiosGet("/get-branch/" + id)
+    async getBranch(id) {
+      await this.axiosGet("/get-branch/" + id)
         .then((response) => {
           if (response.data) {
             this.branch_data = response.data;
             this.branch = response.data.id;
+
+            this.getHouseLotList(this.branch);
           }
         })
         .catch(({ response }) => {
@@ -340,6 +365,22 @@ export default {
         this.serial_no = '';
       });
     },
+    async getHouseLotList(branch_id){
+      await this.axiosGet("/branch/"+ branch_id + "/house_lots")
+      .then((response) => {
+        let data = response.data[0];
+        data.forEach(houseLot => {
+          this.houseLotList.push({
+            value: houseLot.house_lot_num,
+            text: houseLot.house_lot_num
+          });
+        });
+      })
+      .catch(({error}) => {
+        console.log(error);
+      });
+    },
+
   },
   created() {
     this.base_url = window.location.origin;
@@ -372,4 +413,8 @@ export default {
       top: 10px;
       color:red;
     }
+  .house-lot-select >>> .ui.selection.dropdown {
+    min-height: unset !important;
+    height: 38px;
+  }
 </style>

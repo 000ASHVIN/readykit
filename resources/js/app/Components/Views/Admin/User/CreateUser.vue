@@ -281,9 +281,10 @@ export default {
           }
         });
       },
-      getBranches(){
-        this.axiosGet("/admin/get-branches-for-form")
+      async getBranches(){
+        await this.axiosGet("/admin/get-branches-for-form")
         .then((response) => {
+          console.log(response.data)
           this.branches = response.data;
         })
         .catch(({ response }) => {
