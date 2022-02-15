@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin\Branch;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cookie;
+use DataTables;
 
 class AdminBranchesController extends Controller
 {
@@ -87,5 +88,23 @@ class AdminBranchesController extends Controller
         }
         Cookie::queue('not_delete_record_from_table', 'Branch', 10);
         return redirect()->back();
+    }
+    public function getListAjax(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Branch::query();
+            // $data = WaterMeterReading::with(['branch', 'house_lot', 'user'])->orderBy('created_at', 'desc')->get();
+            return DataTables::of($data)
+                    ->editColumn('created_at', function ($row) {
+                            return date('Y/m/d',strtotime($row->created_at));
+                    })
+                    ->addColumn('action', function($row) {
+                        return view('admin.branches.includes.table_buttons', ['id' => $row->id]);
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+
+        return response()->json([false]);
     }
 }

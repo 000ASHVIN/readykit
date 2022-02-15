@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
+use DataTables;
 
 class AdminUsersController extends Controller
 {
@@ -119,4 +120,29 @@ class AdminUsersController extends Controller
         return redirect()->back();
     }
 
+    public function getListAjax(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = User::select('users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.status_id as status', 'branch.name as branch', 'users.created_at')
+                        ->leftJoin('branch', 'users.branch_id', '=', 'branch.id');
+            // $data = WaterMeterReading::with(['branch', 'house_lot', 'user'])->orderBy('created_at', 'desc')->get();
+            return DataTables::of($data)
+                    ->editColumn('first_name', function ($row) {
+                        return $row->first_name. " ". $row->last_name;
+                    })
+                    ->editColumn('status', function ($row) {
+                        return $row->status == 1 ? 'Active': 'Inactive';
+                    })
+                    // ->editColumn('created_at', function ($row) {
+                    //         return date('Y/m/d', strtotime($row->created_at));
+                    // })
+                    ->addColumn('action', function($row) {
+                        return view('admin.users.includes.table_buttons', ['id' => $row->id]);
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+
+        return response()->json([false]);
+    }
 }

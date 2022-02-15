@@ -2,6 +2,25 @@
 
 @section('title', 'Users Management')
 
+@push('after-styles')
+    <style>
+        .datatable .btn {
+            height: 28px !important;
+        }
+        .datatable svg {
+            height: 14px !important;
+        }
+        
+        .datatable td {
+            padding: 10px 30px 10px 15px;
+            vertical-align: middle;
+        } 
+        .datatable td:first-child {
+            padding: 10px 30px;
+        }
+    </style>
+@endpush
+
 @section('contents')
 <div class="content-wrapper">
     <div class="row" style="margin-bottom: 30px;">
@@ -41,7 +60,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($houselots as $houselot)
+                    {{-- @foreach($houselots as $houselot)
                     <tr>
                         <td class="datatable-td">{{$houselot->id }}</td>
                         <td class="datatable-td">{{$houselot->serial_num }}</td>
@@ -64,7 +83,7 @@
                             </a>
                         </td>
                     </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -72,3 +91,34 @@
     </div>
 </div>
 @endsection
+
+@push('after-scripts')
+<script type="text/javascript">
+    $(function () {
+        
+        var table = $('#house_lots_table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('admin.houselots.list') }}",
+            columns: [
+                {data: 'id', name: 'house_lot.id'},
+                {data: 'serial_num', name: 'house_lot.serial_num'},
+                {data: 'house_lot_num', name: 'house_lot.house_lot_num'},
+                {data: 'branch', name:'branch.name'},
+                {data: 'created_at'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            columnDefs: [
+                {
+                    "targets": 3,
+                    "data": "branch",
+                    "render": function ( data, type, row, meta ) {
+                        return data ? data : 'N/A'
+                    }
+                },
+            ]
+        });
+        
+    });
+</script>
+@endpush

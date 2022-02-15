@@ -2,6 +2,25 @@
 
 @section('title', 'Users Management')
 
+@push('after-styles')
+    <style>
+        .datatable .btn {
+            height: 28px !important;
+        }
+        .datatable svg {
+            height: 14px !important;
+        }
+        
+        .datatable td {
+            padding: 10px 30px 10px 15px;
+            vertical-align: middle;
+        } 
+        .datatable td:first-child {
+            padding: 10px 30px;
+        }
+    </style>
+@endpush
+
 @section('contents')
 <div class="content-wrapper">
     <div class="row" style="margin-bottom: 30px;">
@@ -61,9 +80,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($water_readings as $reading)
+                    {{-- @foreach($water_readings as $reading)
                     <tr>
-                        <td class="datatable-td">{{$reading->house_lot ? $reading->house_lot->house_lot_num : 'N/A' }}</td>
+                        <td class="datatable-td">{{$reading->house_lot ? $reading->house_lot->house_lot : 'N/A' }}</td>
                         <td class="datatable-td">{{$reading->branch ? $reading->branch->name : 'N/A' }}</td>
                         <td class="datatable-td">{{$reading->serial_num }}</td>
                         <td class="datatable-td">{{$reading->current_reading ? (strlen($reading->current_reading) > 5 ? substr($reading->current_reading, 0, 5).'..' : $reading->current_reading ): 'N/A'  }}</td>
@@ -94,7 +113,7 @@
                             </a>
                         </td>
                     </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -103,3 +122,51 @@
     </div>
 </div>
 @endsection
+
+@push('after-scripts')
+<script type="text/javascript">
+    $(function () {
+        
+        var table = $('#water_reading_table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('admin.water_readings.list') }}",
+            columns: [
+                {data: 'house_lot_num', name: 'house_lot.house_lot_num'},
+                {data: 'branch', name:'branch.name'},
+                {data: 'serial_num', name: 'house_lot.serial_num'},
+                {data: 'current_reading'},
+                {data: 'last_reading'},
+                {data: 'created_at'},
+                {data: 'image', name: 'image', orderable: false, searchable: false},
+                {data: 'first_name', name: 'users.first_name'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+            columnDefs: [
+                {
+                    "targets": 0,
+                    "data": "house_lot_num",
+                    "render": function ( data, type, row, meta ) {
+                        return data ? data : 'N/A'
+                    }
+                },
+                {
+                    "targets": 1,
+                    "data": "branch",
+                    "render": function ( data, type, row, meta ) {
+                        return data ? data : 'N/A'
+                    }
+                },
+                {
+                    "targets": 4,
+                    "data": "last_reading",
+                    "render": function ( data, type, row, meta ) {
+                        return parseInt(data) > 0 ? data : '-'
+                    }
+                },
+            ]
+        });
+        
+    });
+</script>
+@endpush

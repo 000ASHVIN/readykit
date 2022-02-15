@@ -8,9 +8,9 @@
                         <h1 class="card-title m-0">Water Meter Reading</h1>
                     </div>
                     <div class="card-body align-items-center">
-                        <p> <span style="font-weight: 600;">House Lot</span> : {{ $house_lot->house_lot_num }}</p>
-                        <p> <span style="font-weight: 600;">Branch</span> : {{ $branch->name }}</p>
-                        <p> <span style="font-weight: 600;">S/N</span> : {{ $house_lot->serial_num }}</p>
+                        <p> <span style="font-weight: 600;">House Lot</span> : {{ $house_lot ? $house_lot->house_lot_num : 'N/A' }}</p>
+                        <p> <span style="font-weight: 600;">Branch</span> : {{ $branch ? $branch->name : 'N/A' }}</p>
+                        <p> <span style="font-weight: 600;">S/N</span> : {{ $house_lot ? $house_lot->serial_num : 'N/A' }}</p>
                         <p> <span style="font-weight: 600;">Current reading</span> : {{ $water_reading->current_reading }}</p>
                         <p> <span style="font-weight: 600;">Last Reading</span> : {{ $water_reading->last_reading ?? 'not available' }}</p>
                         <p> <span style="font-weight: 600;">Date Submitted</span> : {{ \Carbon\Carbon::parse($water_reading->created_at)->format('m/d/Y') }}</p>

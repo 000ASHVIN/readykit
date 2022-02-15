@@ -14,21 +14,49 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use App\Exports\WaterReadingExport;
+use App\Models\Core\Auth\User;
 use Maatwebsite\Excel\Facades\Excel;
+use DataTables;
 
 class AdminWaterReadingController extends Controller
 {
     protected $pdfmaker;
     public function index()
     {
-        $water_readings = WaterMeterReading::with(['branch', 'house_lot', 'user'])->get();
-        return view('admin.water_readings.index',compact('water_readings'));
+        // $water_readings = WaterMeterReading::with(['branch', 'house_lot', 'user'])->get();
+        $water_readings = collect();
+        return view('admin.water_readings.index', compact('water_readings'));
     }
 
     public function getWaterReadingsList()
     {
         $water_readings = WaterMeterReading::with(['branch', 'house_lot','user'])->paginate(10);
         return response()->json($water_readings);
+    }
+
+    public function getWaterReadingsListAjax(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = WaterMeterReading::select('water_meter_readings.id', 'house_lot.house_lot_num', 'branch.name as branch', 'house_lot.serial_num', 'current_reading', 'last_reading', 'water_meter_readings.created_at', 'users.first_name', 'image')
+                        ->leftJoin('house_lot', 'water_meter_readings.house_lot_id', '=', 'house_lot.id')
+                        ->leftJoin('branch', 'water_meter_readings.branch_id', '=', 'branch.id')
+                        ->leftJoin('users', 'water_meter_readings.user_id', '=', 'users.id');
+            // $data = WaterMeterReading::with(['branch', 'house_lot','user'])->orderBy('created_at', 'desc')->get();
+            return DataTables::of($data)
+                    ->editColumn('created_at', function ($row) {
+                            return date('Y/m/d',strtotime($row->created_at));
+                    })
+                    ->addColumn('image', function($row) {
+                        return view('admin.water_readings.includes.image', ['image' => $row->image]);
+                    })
+                    ->addColumn('action', function($row) {
+                        return view('admin.water_readings.includes.table_buttons', ['id' => $row->id]);
+                    })
+                    ->rawColumns(['image', 'action'])
+                    ->make(true);
+        }
+
+        return response()->json([false]);
     }
 
     public function create_view()
@@ -227,8 +255,8 @@ class AdminWaterReadingController extends Controller
         foreach($water_readings as $reading){
             // dd(Carbon::parse($reading->created_at)->format('d/m/Y h:m'));
             $record = [
-                $reading->house_lot->house_lot_num,
-                $reading->branch->name,
+                $reading->house_lot ? $reading->house_lot->house_lot_num : 'N/A',
+                $reading->branch ? $reading->branch->name : 'N/A',
                 $reading->serial_num,
                 $reading->current_reading,
                 $reading->last_reading ?? 'N/A',

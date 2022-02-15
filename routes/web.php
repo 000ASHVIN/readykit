@@ -67,6 +67,8 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
     Route::post('users/{id}/update', [AdminUsersController::class, 'update'])->name('admin.user-update');
     Route::get('users/{id}/delete', [AdminUsersController::class, 'delete'])->name('admin.user-delete');
     Route::get('get-user/{id}',[AdminUsersController::class,'getUser']);
+
+    Route::get('users/list', [AdminUsersController::class, 'getListAjax'])->name('admin.users.list');
 });
 Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
     Route::get('branches', [AdminBranchesController::class, 'index'])->name('admin.branches.index');
@@ -77,6 +79,8 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
     Route::get('branches/{id}/edit', [AdminBranchesController::class, 'edit'])->name('admin.branch-edit');
     Route::post('branches/{id}/update', [AdminBranchesController::class, 'update'])->name('admin.branch-update');
     Route::get('branches/{id}/delete', [AdminBranchesController::class, 'delete'])->name('admin.branch-delete');
+
+    Route::get('branches/list', [AdminBranchesController::class, 'getListAjax'])->name('admin.branches.list');
 });
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('houselots', [AdminHouseLotsController::class, 'index'])->name('admin.houselots.index');
@@ -86,6 +90,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('houselots/{id}/edit', [AdminHouseLotsController::class, 'edit'])->name('admin.houselot-edit');
     Route::post('houselots/{id}/update', [AdminHouseLotsController::class, 'update'])->name('admin.houselot-update');
     Route::get('houselots/{id}/delete', [AdminHouseLotsController::class, 'delete'])->name('admin.houselot-delete');
+
+    Route::get('houselots/list', [AdminHouseLotsController::class, 'getListAjax'])->name('admin.houselots.list');
 });
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
@@ -98,6 +104,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('water_readings/{id}/delete', [AdminWaterReadingController::class, 'delete'])->name('admin.water_reading-delete');
     Route::get('get-reading-info/{id}',[AdminWaterReadingController::class,'getReadingInfo'])->name('admin.get_reading_info');
     Route::get('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
+
+    Route::get('water_readings/list', [AdminWaterReadingController::class, 'getWaterReadingsListAjax'])->name('admin.water_readings.list');
 });
 
 Route::middleware(['auth'])->group(function () {

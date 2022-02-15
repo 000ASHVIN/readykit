@@ -33,10 +33,10 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#water_reading_table').DataTable();
-            $('#branches_table').DataTable();
-            $('#house_lots_table').DataTable();
-            $('#users_table').DataTable();
+            // $('#water_reading_table').DataTable();
+            // $('#branches_table').DataTable();
+            // $('#house_lots_table').DataTable();
+            // $('#users_table').DataTable();
         });
     </script>
     @stack('after-scripts')

@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use DataTables;
 
 class AdminHouseLotsController extends Controller
 {
@@ -133,5 +134,25 @@ class AdminHouseLotsController extends Controller
         }
         Cookie::queue('not_delete_record_from_table', 'House Lot', 10);
         return redirect()->back();
+    }
+
+    public function getListAjax(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = HouseLot::select('house_lot.id', 'house_lot.house_lot_num', 'branch.name as branch', 'house_lot.serial_num','house_lot.created_at')
+                        ->leftJoin('branch', 'house_lot.branch_id', '=', 'branch.id');
+            // $data = WaterMeterReading::with(['branch', 'house_lot','user'])->orderBy('created_at', 'desc')->get();
+            return DataTables::of($data)
+                    ->editColumn('created_at', function ($row) {
+                            return date('Y/m/d',strtotime($row->created_at));
+                    })
+                    ->addColumn('action', function($row) {
+                        return view('admin.house_lots.includes.table_buttons', ['id' => $row->id]);
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+
+        return response()->json([false]);
     }
 }
