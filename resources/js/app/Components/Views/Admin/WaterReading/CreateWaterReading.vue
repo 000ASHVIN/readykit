@@ -319,7 +319,6 @@ export default {
       this.axiosGet("/get-serialnum/" + this.house_lot_no)
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
           this.error.serial_no = "";
           this.error.house_lot_no = "";
           this.serial_no_process = false;
@@ -363,9 +362,10 @@ export default {
       await this.axiosGet("/branch/"+ branch_id + "/house_lots")
       .then((response) => {
         let data = response.data[0];
+        this.houseLotList = [];
         data.forEach(houseLot => {
           this.houseLotList.push({
-            value: houseLot.house_lot_num,
+            value: houseLot.id,
             text: houseLot.house_lot_num
           });
         });

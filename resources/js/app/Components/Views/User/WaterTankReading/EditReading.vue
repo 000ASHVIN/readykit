@@ -279,14 +279,14 @@ export default {
       this.id = this.water_reading.id;
       this.branch = this.water_reading.branch_id;
       this.house_lot_id = this.water_reading.house_lot_id;
-      this.house_lot_no = this.water_reading.house_lot.house_lot_num;
+      this.house_lot_no = this.water_reading.house_lot.id;
       this.getSerialNum();
       this.current_reading = this.water_reading.current_reading;
       this.remark = this.water_reading.remark;
 
       this.selectedHouseLot = {
         value: this.house_lot_no,
-        text: this.house_lot_num
+        text: this.water_reading.house_lot.house_lot_num
       };
     },
     clearErrors() {
@@ -371,7 +371,7 @@ export default {
         let data = response.data[0];
         data.forEach(houseLot => {
           this.houseLotList.push({
-            value: houseLot.house_lot_num,
+            value: houseLot.id,
             text: houseLot.house_lot_num
           });
         });

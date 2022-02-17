@@ -24,9 +24,9 @@
             <div class="align-items-center row">
               <p><span class="col-md-6">Last Reading</span><span class="col-md-6">{{ water_reading.last_reading }}</span> </p>
             </div>
-            <div class="align-items-center row">
+            <!-- <div class="align-items-center row">
               <p><span class="col-md-6">Date Submitted</span><span class="col-md-6">{{ water_reading.last_reading ? water_reading.last_reading :'-' }}</span> </p>
-            </div>
+            </div> -->
             <div class="align-items-center row">
               <p><span class="col-md-6">Image</span>
               <img class="col-md-6" :src="base_url+'/storage/images/meter_readings/'+water_reading.image" alt="" height="250" width="250">

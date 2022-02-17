@@ -11,17 +11,17 @@ class HouseLot extends Model
 
     protected $table = "house_lot";
 
-    protected $fillable = [
-        'serial_num',
-        'house_lot_num',
-        'branch_id'
-    ];
+    // protected $fillable = [
+    //     'serial_num',
+    //     'house_lot_num'
+    // ];
+    protected $guarded = [];
     
     public function water_readings() {
         return $this->hasMany(WaterMeterReading::class);
     }
 
-    public function Branch() {
-        return $this->belongsTo(Branch::class, 'branch_id');
+    public function branch() {
+        return $this->belongsToMany(Branch::class)->withTimeStamps();
     }
 }

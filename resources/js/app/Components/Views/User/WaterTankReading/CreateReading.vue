@@ -333,7 +333,7 @@ export default {
         let data = response.data[0];
         data.forEach(houseLot => {
           this.houseLotList.push({
-            value: houseLot.house_lot_num,
+            value: houseLot.id,
             text: houseLot.house_lot_num
           });
         });

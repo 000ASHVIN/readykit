@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBranchIdFieldToHouseLotTable extends Migration
+class CreateBranchHouseLotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddBranchIdFieldToHouseLotTable extends Migration
      */
     public function up()
     {
-        Schema::table('house_lot', function (Blueprint $table) {
-            $table->unsignedBigInteger('branch_id');
+        Schema::create('branch_house_lot', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->unsignedBigInteger('house_lot_id')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddBranchIdFieldToHouseLotTable extends Migration
      */
     public function down()
     {
-        Schema::table('house_lot', function (Blueprint $table) {
-            $table->dropColumn('branch_id');
-        });
+        Schema::dropIfExists('branch_house_lot');
     }
 }

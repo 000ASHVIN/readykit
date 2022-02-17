@@ -171,7 +171,12 @@ Route::any('symlink', [SymlinkController::class, 'run'])
 Route::get('call/migrate', function() {
     Artisan::call('migrate');
     echo "done";
- });
+});
+
+Route::get('call/migrate/rollback', function() {
+    Artisan::call('migrate:rollback');
+    echo "done";
+});
 
  Route::get('call/migrate/fresh', function() {
     Artisan::call('migrate:fresh');

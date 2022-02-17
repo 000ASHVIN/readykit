@@ -101,11 +101,11 @@
             serverSide: true,
             ajax: "{{ route('admin.houselots.list') }}",
             columns: [
-                {data: 'id', name: 'house_lot.id'},
-                {data: 'serial_num', name: 'house_lot.serial_num'},
-                {data: 'house_lot_num', name: 'house_lot.house_lot_num'},
-                {data: 'branch', name:'branch.name'},
-                {data: 'created_at'},
+                {data: 'id', name: 'id'},
+                {data: 'serial_num', name: 'serial_num'},
+                {data: 'house_lot_num', name: 'house_lot_num'},
+                {data: 'branch', name: 'branch'},
+                {data: 'created_at', name: 'created_at'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             columnDefs: [

@@ -10,10 +10,10 @@ class HouseLotController extends Controller
 {
     public function getSerialNum($id){
         // dd($id);
-        $serial_num = HouseLot::where('house_lot_num', $id)->first();
+        $serial_num = HouseLot::find($id);
         if(!$serial_num){
-            return response()->json(false,422);
+            return response()->json(false, 422);
         }
-        return json_encode($serial_num) ;
+        return json_encode($serial_num);
     }
 }

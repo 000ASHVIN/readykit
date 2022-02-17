@@ -12,7 +12,7 @@ class WaterMeterReading extends Model
 
     protected $table= "water_meter_readings";
 
-    protected $fillable  = [
+    protected $fillable = [
         'user_id',
         'house_lot_id',
         'branch_id',

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use DataTables;
+use Illuminate\Support\Facades\DB;
 
 class AdminHouseLotsController extends Controller
 {
@@ -34,8 +35,8 @@ class AdminHouseLotsController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'serial_no' => 'required|max:50',
-            'house_lot_no' => 'required|unique:house_lot,house_lot_num|max:50',
+            'serial_no' => 'required|max:50|unique:house_lot,serial_num',
+            'house_lot_no' => 'required|max:50',
             'branch' => 'required'
         ]);
 
@@ -56,11 +57,19 @@ class AdminHouseLotsController extends Controller
             return json_encode('error');
         }
 
+        $branch_ids = [];
+        $branch = json_decode($request->branch);
+        foreach($branch as $data) {
+            $branch_ids[] = $data->value;
+        }
+
         $houselot = HouseLot::create([
             'serial_num' => $request->serial_no,
-            'house_lot_num' => $request->house_lot_no,
-            'branch_id' => $request->branch
+            'house_lot_num' => $request->house_lot_no
         ]);
+
+        $houselot->branch()->sync($branch_ids);
+
         if (!$houselot) {
             return json_encode(false);
         }
@@ -69,7 +78,7 @@ class AdminHouseLotsController extends Controller
 
     public function edit($id)
     {
-        $houselot = HouseLot::find($id);
+        $houselot = HouseLot::with('branch')->find($id);
         return view('admin.house_lots.edit', compact('houselot'));
     }
 
@@ -82,7 +91,7 @@ class AdminHouseLotsController extends Controller
         
         $validator = Validator::make($request->all(), [
             'serial_no' => 'required|max:50',
-            'house_lot_no' => 'required|max:50|unique:house_lot,house_lot_num,'.$id,
+            'house_lot_no' => 'required|max:50',
             'branch' => 'required'
         ]);
 
@@ -103,13 +112,29 @@ class AdminHouseLotsController extends Controller
             return json_encode('error');
         }
 
+        $checkForUnique = HouseLot::where('id', '!=', $id)->where('serial_num', $request->serial_no)->first();
+        if($checkForUnique) {
+            $message = "This Serial Number Has already been taken, Please use another one.";
+            Cookie::queue('error_for_create_reading_field', 'Serial no', 10);
+            Cookie::queue('error_for_create_reading', $message, 10);
+
+            return json_encode('error');
+        }
+
         $houselot = HouseLot::find($id);
+        $branch_ids = [];
+        $branch = json_decode($request->branch);
+        foreach($branch as $data) {
+            $branch_ids[] = $data->value;
+        }
+        $houselot->branch()->sync($branch_ids);
+        
         $updated = $houselot->update([
             'serial_num' => $request->serial_no,
             'house_lot_num' => $request->house_lot_no,
-            'branch_id' => $request->branch,
             'updated_at' => Carbon::now()
         ]);
+
         $update_reading = WaterMeterReading::where('house_lot_id', $houselot->id)->update([
             'serial_num' => $request->serial_no
         ]);
@@ -139,13 +164,22 @@ class AdminHouseLotsController extends Controller
     public function getListAjax(Request $request)
     {
         if ($request->ajax()) {
-            $data = HouseLot::select('house_lot.id', 'house_lot.house_lot_num', 'branch.name as branch', 'house_lot.serial_num','house_lot.created_at')
-                        ->leftJoin('branch', 'house_lot.branch_id', '=', 'branch.id');
-            // $data = WaterMeterReading::with(['branch', 'house_lot','user'])->orderBy('created_at', 'desc')->get();
+            $data = HouseLot::select(
+                'house_lot.id',
+                'house_lot.house_lot_num',
+                'house_lot.serial_num',
+                'house_lot.created_at',
+                DB::raw('(SELECT GROUP_CONCAT(name) FROM `branch` WHERE id IN ( SELECT branch_id from branch_house_lot WHERE house_lot_id = house_lot.id )) as branch')
+            )->get();
+            
             return DataTables::of($data)
                     ->editColumn('created_at', function ($row) {
                             return date('Y/m/d',strtotime($row->created_at));
                     })
+                    // ->addColumn('branch', function($row) {
+                    //     $branches = $row->branch->pluck('name')->toArray();
+                    //     return implode(", ", $branches);
+                    // })
                     ->addColumn('action', function($row) {
                         return view('admin.house_lots.includes.table_buttons', ['id' => $row->id]);
                     })

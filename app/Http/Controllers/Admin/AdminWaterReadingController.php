@@ -105,7 +105,7 @@ class AdminWaterReadingController extends Controller
             return redirect()->route('admin.water_readings.create-view');
         }
 
-        if ($last_reading = WaterMeterReading::where('house_lot_id', $request->house_lot_id)->latest()->first()) {
+        if ($last_reading = WaterMeterReading::where('serial_num', $request->serial_num)->latest()->first()) {
             $request->merge(['last_reading' => $last_reading->current_reading]);
         }
 

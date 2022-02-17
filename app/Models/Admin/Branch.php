@@ -19,7 +19,7 @@ class Branch extends Model
     }
 
     public function houseLot() {
-        return $this->hasMany(HouseLot::class, 'branch_id', 'id');
+        return $this->belongsToMany(HouseLot::class)->withTimeStamps();
     }
 
     public function users() {
