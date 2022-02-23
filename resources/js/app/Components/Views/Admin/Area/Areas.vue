@@ -5,7 +5,7 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb p-0 d-flex align-items-center mb-primary">
             <li class="breadcrumb-item page-header d-flex align-items-center">
-              <h4 class="mb-0">Branches</h4>
+              <h4 class="mb-0">Areas</h4>
             </li>
           </ol>
         </nav>
@@ -47,27 +47,27 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="branch in branches.data" :key="branch.id">
+            <tr v-for="area in areas.data" :key="area.id">
               <td data-title="id" class="datatable-td">
-                <span class=""> {{ branch.id }} </span>
+                <span class=""> {{ area.id }} </span>
               </td>
               <td data-title="Name" class="datatable-td">
-                <span class=""> {{ branch.name }} </span>
+                <span class=""> {{ area.name }} </span>
               </td>
 
               <td data-title="Email" class="datatable-td">
-                <span class=""> {{ (branch.created_at).substring(0,10) }} </span>
+                <span class=""> {{ (area.created_at).substring(0,10) }} </span>
               </td>
               <td data-title="Action" class="datatable-td">
                 <a
-                  :href="getEditUrl(branch.id)"
+                  :href="getEditUrl(area.id)"
                   type="button"
                   class="btn btn-primary mr-2 mb-2 mb-sm-0"
                 >
                   <app-icon name="edit" />
                 </a>
                 <a
-                  @click="deleteConfirm(branch.id)"
+                  @click="deleteConfirm(area.id)"
                   type="button"
                   class="btn btn-danger mr-2 mb-2 mb-sm-0"
                 >
@@ -75,13 +75,13 @@
                 </a>
               </td>
             </tr>
-            <tr v-if="branches.length <= 0 && !fetching" v-cloak>
+            <tr v-if="areas.length <= 0 && !fetching" v-cloak>
               <td colspan="5" align="center">no data found</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <pagination align="right" :data="branches" @pagination-change-page="getBranches" style=" margin-top: 10px;"></pagination>
+      <pagination align="right" :data="areas" @pagination-change-page="getAreas" style=" margin-top: 10px;"></pagination>
       <!-- <div class="p-primary">
         <div>
           <div class="d-flex flex-column flex-md-row justify-content-between">
@@ -227,47 +227,47 @@
 import { FormMixin } from "../../../../../core/mixins/form/FormMixin";
 import pagination from 'laravel-vue-pagination';
 export default {
-  name: "Branches",
+  name: "Areas",
   mixins: [FormMixin],
   components: {
     pagination
   },
   data() {
     return {
-      branches: {},
+      areas: {},
       fetching : false,
       base_url:''
     };
   },
   methods: {
-    async getBranches(page=1) {
-      this.axiosGet(`/admin/get-branches?page=${page}`)
+    async getAreas(page=1) {
+      this.axiosGet(`/admin/get-areas?page=${page}`)
         .then((response) => {
-          this.branches = response.data;
+          this.areas = response.data;
           this.fetching = false;
-          console.log(this.branches);
+          console.log(this.areas);
         })
         .catch(({ response }) => {
           console.log(response);
         });
     },
     getEditUrl(id) {
-      return "/admin/branches/" + id + "/edit";
+      return "/admin/areas/" + id + "/edit";
     },
     deleteConfirm(id) {
       this.$confirm("Are you sure to delete?").then(() => {
-        this.deleteBranch(id);
+        this.deleteArea(id);
       });
     },
-    deleteBranch(id){
-        this.axiosDelete("/admin/branches/"+id+"/delete")
+    deleteArea(id){
+        this.axiosDelete("/admin/areas/"+id+"/delete")
           .then((response) => {
               if(response.data){
-                  this.$alert("Branch Deleted !!");
-                  this.getBranches();
+                  this.$alert("Area Deleted !!");
+                  this.getAreas();
               }
               else{
-                  this.$alert("There's Problem deleting Branch !!");
+                  this.$alert("There's Problem deleting Area !!");
               }
           })
           .catch(({ response }) => {
@@ -278,7 +278,7 @@ export default {
   created() {
     this.base_url = window.location.origin;
     this.fetching = true;
-    this.getBranches();
+    this.getAreas();
   },
 };
 </script>

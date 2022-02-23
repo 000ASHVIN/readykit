@@ -1,14 +1,8 @@
 {
-    "/js/core.js": "/js/core.js?id=934bbb648f59f2ae1228",
-    "/css/core.css": "/css/core.css?id=d2cf6e709ea4b9b9e5a3",
-    "/css/dropzone.css": "/css/dropzone.css?id=0c48441e469cdaf765c8",
-    "/css/fontawesome.css": "/css/fontawesome.css?id=963adfda14e5d7f54d9b",
-    "/js/core.js.map": "/js/core.js.map?id=47faf6db3b79bce87f12",
-    "/css/core.css.map": "/css/core.css.map?id=c79b9bf5abdac0b97216",
-    "/css/dropzone.css.map": "/css/dropzone.css.map?id=29186dd994f4e0321aa9",
-    "/css/fontawesome.css.map": "/css/fontawesome.css.map?id=3aa31e93d30215c330d3",
-    "/js/manifest.js": "/js/manifest.js?id=89712bc6d8c588400cae",
-    "/js/manifest.js.map": "/js/manifest.js.map?id=2d58fed8b8c4a064950d",
-    "/js/vendor.js": "/js/vendor.js?id=d9278724ee01ce617130",
-    "/js/vendor.js.map": "/js/vendor.js.map?id=54fe2eb77cbd2b4be784"
+    "/js/core.js": "/js/core.js",
+    "/css/core.css": "/css/core.css",
+    "/css/dropzone.css": "/css/dropzone.css",
+    "/css/fontawesome.css": "/css/fontawesome.css",
+    "/js/manifest.js": "/js/manifest.js",
+    "/js/vendor.js": "/js/vendor.js"
 }

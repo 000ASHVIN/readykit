@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAreasController;
 use App\Http\Controllers\Admin\AdminBranchesController;
 use App\Http\Controllers\Admin\AdminHouseLotsController;
 use App\Http\Controllers\Admin\AdminUsersController;
@@ -82,6 +83,19 @@ Route::middleware(['auth','is_admin'])->prefix('admin')->group(function () {
 
     Route::get('branches/list', [AdminBranchesController::class, 'getListAjax'])->name('admin.branches.list');
 });
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('areas', [AdminAreasController::class, 'index'])->name('admin.areas.index');
+    Route::get('areas/create', [AdminAreasController::class, 'create_view'])->name('admin.areas.create-view');
+    Route::post('areas/create', [AdminAreasController::class, 'create'])->name('admin.area.create');
+    Route::get('get-areas', [AdminAreasController::class, 'getAreasList'])->name('get.admin.areas');
+    Route::get('get-areas-for-form', [AdminAreasController::class, 'getAreasForFormList'])->name('get.admin.areas.for.form');
+    Route::get('areas/{id}/edit', [AdminAreasController::class, 'edit'])->name('admin.area-edit');
+    Route::post('areas/{id}/update', [AdminAreasController::class, 'update'])->name('admin.area-update');
+    Route::get('areas/{id}/delete', [AdminAreasController::class, 'delete'])->name('admin.area-delete');
+
+    Route::get('areas/list', [AdminAreasController::class, 'getListAjax'])->name('admin.areas.list');
+});
+
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('houselots', [AdminHouseLotsController::class, 'index'])->name('admin.houselots.index');
     Route::get('houselots/create', [AdminHouseLotsController::class, 'create_view'])->name('admin.houselots.create-view');

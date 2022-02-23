@@ -78,6 +78,10 @@ Vue.component('admin-branches', require('./Components/Views/Admin/Branch/Branche
 Vue.component('admin-branch-edit', require('./Components/Views/Admin/Branch/EditBranch').default);
 Vue.component('admin-branch-create', require('./Components/Views/Admin/Branch/CreateBranch').default);
 
+Vue.component('admin-areas', require('./Components/Views/Admin/Area/Areas').default);
+Vue.component('admin-area-edit', require('./Components/Views/Admin/Area/EditArea').default);
+Vue.component('admin-area-create', require('./Components/Views/Admin/Area/CreateArea').default);
+
 Vue.component('admin-house_lots', require('./Components/Views/Admin/HouseLot/HouseLots').default);
 Vue.component('admin-house_lot-edit', require('./Components/Views/Admin/HouseLot/EditHouseLot').default);
 Vue.component('admin-house_lot-create', require('./Components/Views/Admin/HouseLot/CreateHouseLot').default);
