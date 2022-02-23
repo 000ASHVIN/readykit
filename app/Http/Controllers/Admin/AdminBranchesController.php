@@ -13,13 +13,14 @@ class AdminBranchesController extends Controller
 {
     public function index()
     {
-        $branches = Branch::all();
+        $branches = Branch::with('area')->get();
+        // dd($branches);
         return view('admin.branches.index',compact('branches'));
     }
 
     public function getBranchesList()
     {
-        $users = Branch::paginate(10);
+        $users = Branch::with('area')->paginate(10);
         return json_encode($users);
     }
 
@@ -36,12 +37,15 @@ class AdminBranchesController extends Controller
 
     public function create(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
-            'name' => 'required|max:50'
+            'name' => 'required|max:50',
+            'area_id' => 'required|max:50'
         ]);
 
         $branch = Branch::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'area_id' => $request->area_id
         ]);
         if(!$branch){
             return json_encode(false);
@@ -51,7 +55,8 @@ class AdminBranchesController extends Controller
 
     public function edit($id)
     {
-        $branch = Branch::find($id);
+        $branch = Branch::with('area')->find($id);
+        // dd($branch);
         return view('admin.branches.edit', compact('branch'));
     }
 
@@ -92,7 +97,8 @@ class AdminBranchesController extends Controller
     public function getListAjax(Request $request)
     {
         if ($request->ajax()) {
-            $data = Branch::query();
+            $data = Branch::select('branch.id', 'branch.name', 'area.name as area', 'branch.created_at')
+                ->leftJoin('area', 'branch.area_id', '=', 'area.id');
             // $data = WaterMeterReading::with(['branch', 'house_lot', 'user'])->orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
                     ->editColumn('created_at', function ($row) {

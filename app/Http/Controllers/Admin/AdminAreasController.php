@@ -91,6 +91,12 @@ class AdminAreasController extends Controller
         Cookie::queue('delete_record_from_table', 'Area', 10);
         return redirect()->back();
     }
+
+    public function getAreasForFormList(){
+        $users = Area::all();
+        return json_encode($users);
+    }
+
     public function getListAjax(Request $request)
     {
         if ($request->ajax()) {

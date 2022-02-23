@@ -12,4 +12,8 @@ class Area extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function branches(){
+        return $this->hasMany(Branch::class,'area_id','id');
+    }
 }

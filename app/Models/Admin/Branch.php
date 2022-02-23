@@ -11,11 +11,16 @@ class Branch extends Model
     use HasFactory;
     protected $table= "branch";
     protected $fillable = [
-        'name'
+        'name',
+        'area_id'
     ];
 
     public function water_readings(){
         return $this->hasMany(WaterMeterReading::class);
+    }
+
+    public function area(){
+        return $this->belongsTo(Area::class,'area_id');
     }
 
     public function houseLot() {

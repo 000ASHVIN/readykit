@@ -27,6 +27,27 @@
                   </div>
                 </div>
               </div>
+              <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> Area </label>
+                <div class="col-md-8">
+                  <select
+                    id="inputs_status"
+                    class="custom-select"
+                    :style='
+                      "background-image: url("+dropDownImage+");"
+                    '
+                    v-model="area"
+                  >
+                    <option value="">Select Area</option>
+                    <option :value="area.id" v-for="area in areas" :key="area.id"> {{ area.name }}</option>
+                  </select>
+                  <div>
+                    <small class="text-danger validation-error" v-if="this.error.area">
+                      {{ this.error.area }}
+                    </small>
+                  </div>
+                </div>
+              </div>
               <div class="mt-5 action-buttons">
                 <a @click="updateBranch" class="btn btn-primary mr-2">
                   Update Branch
@@ -56,24 +77,34 @@ export default {
     return {
         id:'',
         name:'',
+        area:'',
+        areas:[],
+        dropDownImage:'',
         error:{
-          name:''
+          name:'',
+          area:''
         }
     };
   },
   methods: {
       clearErrors(){
         this.error.name ='';
+        this.error.area ='';
       },
       setBranch(){
           this.id=this.branch.id;
           this.name=this.branch.name;
+          this.area=this.branch.area.id;
       },
       checkValidation(){
         let is_error = false;
         if(this.name == "" && !this.name){
           is_error = true;
-          this.error.name = "First name is required";
+          this.error.name = "Name is required";
+        }
+        if(this.area == "" && !this.area){
+          is_error = true;
+          this.error.area = "Area is required";
         }
         return is_error;
       },
@@ -83,7 +114,8 @@ export default {
           return false;
         }
         let url = "/admin/branches/"+this.id+"/update",payload = {
-        name:this.name
+        name:this.name,
+        area_id:this.area
         }
         this.axiosPost({url,data:payload})
         .then((response) => {
@@ -102,10 +134,21 @@ export default {
             }
           }
         });
+      },
+      getAreas(){
+        this.axiosGet("/admin/get-areas-for-form")
+        .then((response) => {
+          this.areas = response.data;
+        })
+        .catch(({ response }) => {
+          console.log(response);
+        });
       }
   },
   created() {
-      this.setBranch();
+    this.setBranch();
+    this.dropDownImage = window.location.origin+'/images/chevron-down.svg';
+    this.getAreas();
   },
 };
 </script>
