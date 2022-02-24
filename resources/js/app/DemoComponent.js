@@ -94,3 +94,4 @@ Vue.component('user-create-reading', require('./Components/Views/User/WaterTankR
 Vue.component('user-show-reading', require('./Components/Views/User/WaterTankReading/ShowReading').default);
 Vue.component('user-edit-reading', require('./Components/Views/User/WaterTankReading/EditReading').default);
 
+Vue.component('admin-dashboard', require('./Components/Views/Admin/Dashbaord/Dashboard').default);

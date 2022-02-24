@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAreasController;
 use App\Http\Controllers\Admin\AdminBranchesController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminHouseLotsController;
 use App\Http\Controllers\Admin\AdminUsersController;
 use App\Http\Controllers\Admin\AdminWaterReadingController;
@@ -109,6 +110,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    // Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
     Route::get('water_readings', [AdminWaterReadingController::class, 'index'])->name('admin.water_readings.index');
     Route::get('water_readings/create', [AdminWaterReadingController::class, 'create_view'])->name('admin.water_readings.create-view');
     Route::post('water_readings/create', [AdminWaterReadingController::class, 'create'])->name('admin.water_readings.create');

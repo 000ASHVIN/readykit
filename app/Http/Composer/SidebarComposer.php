@@ -10,12 +10,12 @@ class SidebarComposer
     {
         if (auth()->user() && auth()->user()->roles()->first()->is_admin) {
             $view->with(['data' => [
-                [
-                    'icon' => 'pie-chart',
-                    'name' => 'Dashboard',
-                    'url' => '',
-                    'permission' => '',
-                ],
+                // [
+                //     'icon' => 'pie-chart',
+                //     'name' => 'Dashboard',
+                //     'url' => '',
+                //     'permission' => '',
+                // ],
                 // [
                 //     'id' => 'system-setting',
                 //     'icon' => 'settings',
@@ -119,25 +119,25 @@ class SidebarComposer
 
                     ],
                 ],
-                // [
-                //     'id' => 'readings',
-                //     'icon' => 'edit',
-                //     'name' => 'Water Readings',
-                //     'permission' => '',
-                //     'subMenu' => [
-                //         [
-                //             'name' => 'All Tank Readings',
-                //             'url' => request()->root() . '/admin/water_readings',
-                //             'permission' => '',
-                //         ],
-                //         [
-                //             'name' => 'Create Tank Reading',
-                //             'url' => request()->root() . '/admin/water_readings/create',
-                //             'permission' => '',
-                //         ],
+                [
+                    'id' => 'readings',
+                    'icon' => 'edit',
+                    'name' => 'Water Readings',
+                    'permission' => '',
+                    'subMenu' => [
+                        [
+                            'name' => 'All Tank Readings',
+                            'url' => request()->root() . '/admin/water_readings',
+                            'permission' => '',
+                        ],
+                        [
+                            'name' => 'Create Tank Reading',
+                            'url' => request()->root() . '/admin/water_readings/create',
+                            'permission' => '',
+                        ],
 
-                //     ],
-                // ],
+                    ],
+                ],
                 [
                     'id' => 'areas',
                     'icon' => 'edit',
@@ -150,7 +150,7 @@ class SidebarComposer
                             'permission' => '',
                         ],
                         [
-                            'name' => 'Create Tank Reading',
+                            'name' => 'Create Area',
                             'url' => request()->root() . '/admin/areas/create',
                             'permission' => '',
                         ],

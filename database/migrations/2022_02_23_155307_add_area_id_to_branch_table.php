@@ -14,7 +14,7 @@ class AddAreaIdToBranchTable extends Migration
     public function up()
     {
         Schema::table('branch', function (Blueprint $table) {
-            $table->unsignedBigInteger('area_id');
+            $table->unsignedBigInteger('area_id')->nullable();
         });
     }
 
