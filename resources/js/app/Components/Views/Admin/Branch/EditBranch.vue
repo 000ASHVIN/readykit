@@ -146,9 +146,9 @@ export default {
       }
   },
   created() {
+    this.getAreas();
     this.setBranch();
     this.dropDownImage = window.location.origin+'/images/chevron-down.svg';
-    this.getAreas();
   },
 };
 </script>

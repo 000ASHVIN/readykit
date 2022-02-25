@@ -62,13 +62,16 @@ class AdminBranchesController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $validated = $request->validate([
-            'name' => 'required|max:50'
+            'name' => 'required|max:50',
+            'area_id' => 'required'
         ]);
 
         $user = Branch::find($id);
         $updated = $user->update([
             'name' => $request->name,
+            'area_id' => $request->area_id,
             'updated_at' => Carbon::now()
         ]);
 
