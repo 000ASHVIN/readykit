@@ -87,6 +87,7 @@ Vue.component('admin-house_lot-edit', require('./Components/Views/Admin/HouseLot
 Vue.component('admin-house_lot-create', require('./Components/Views/Admin/HouseLot/CreateHouseLot').default);
 
 Vue.component('admin-water_readings', require('./Components/Views/Admin/WaterReading/WaterReadings').default);
+Vue.component('admin-water-datatable', require('./Components/Views/Admin/WaterReading/Datatable').default);
 Vue.component('admin-water_reading-edit', require('./Components/Views/Admin/WaterReading/EditWaterReading').default);
 Vue.component('admin-water_reading-create', require('./Components/Views/Admin/WaterReading/CreateWaterReading').default);
 
@@ -95,3 +96,4 @@ Vue.component('user-show-reading', require('./Components/Views/User/WaterTankRea
 Vue.component('user-edit-reading', require('./Components/Views/User/WaterTankReading/EditReading').default);
 
 Vue.component('admin-dashboard', require('./Components/Views/Admin/Dashbaord/Dashboard').default);
+Vue.component('admin-reports', require('./Components/Views/Admin/Reports/Reports').default);

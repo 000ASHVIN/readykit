@@ -88,7 +88,7 @@ class AdminUsersController extends Controller
         ]);
         
         $user = User::find($id);
-        $updated = $user->update([
+        $data = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -96,7 +96,13 @@ class AdminUsersController extends Controller
             'status_id' => $request->status_id,
             'branch_id' => $request->branch_id, 
             'updated_at' => Carbon::now()
-        ]);
+        ];
+
+        if($request->temp_password && $request->temp_password != '') {
+            $data['password'] = Hash::make($request->temp_password);
+        }
+
+        $updated = $user->update($data);
 
         if($updated){
             return json_encode(true);

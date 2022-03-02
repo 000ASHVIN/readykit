@@ -3,6 +3,7 @@
              :logo-url="urlGenerator('/')"
              :logo-src="urlGenerator(logo)"
              :logo-icon-src="urlGenerator(logoIcon)"
+             :is_admin="is_admin"
     />
 </template>
 
@@ -20,7 +21,8 @@ export default {
         },
         logoIcon: {
             type: String,
-        }
+        },
+        is_admin: ''
     },
     data() {
         return {

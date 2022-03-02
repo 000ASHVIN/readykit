@@ -38,7 +38,7 @@ class LoginController extends Controller
         try {
             $this->service->login();
             if(auth()->user()->roles()->first()->is_admin){
-                return route('admin.users.index');
+                return route('admin.dashboard.index');
             }
             return route('user.water-tank.reading');
             // custom hook

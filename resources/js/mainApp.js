@@ -18,10 +18,20 @@ Vue.use(VueSimpleAlert);
 
 import 'vue-search-select/dist/VueSearchSelect.css'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 /**
  * vuex
  */
-
+library.add(faUserSecret)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin)
 Vue.use(Vuex);
 import storeData from "./store/Index";
 // import storeData from "./store/Index";

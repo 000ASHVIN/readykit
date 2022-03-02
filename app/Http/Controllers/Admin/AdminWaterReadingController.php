@@ -28,35 +28,101 @@ class AdminWaterReadingController extends Controller
         return view('admin.water_readings.index', compact('water_readings'));
     }
 
+    public function getReadingsByBranch($branch_id)
+    {
+        // $data = WaterMeterReading::select('water_meter_readings.id', 'house_lot.house_lot_num', 'branch.name as branch', 'area.name as area', 'house_lot.serial_num', 'current_reading', 'last_reading', 'water_meter_readings.created_at', 'users.first_name', 'image')
+        //                 ->leftJoin('house_lot', 'water_meter_readings.house_lot_id', '=', 'house_lot.id')
+        //                 ->leftJoin('branch', 'water_meter_readings.branch_id', '=', 'branch.id')
+        //                 ->leftJoin('area', 'area.id', '=', 'branch.area_id')
+        //                 ->leftJoin('users', 'water_meter_readings.user_id', '=', 'users.id');
+        //     // $data = WaterMeterReading::with(['branch', 'house_lot','user'])->orderBy('created_at', 'desc')->get();
+        // if($branch_id != '') {
+        //     $data = $data->where('branch.id', '=', $branch_id);
+        // }
+        // dd($data->get());
+        $water_reading = WaterMeterReading::with(['branch', 'house_lot', 'user'])->where('id', 2)->first();
+        return view('admin.water_readings.branch', compact('branch_id', 'water_reading'));
+    }
+
     public function getWaterReadingsList()
     {
         $water_readings = WaterMeterReading::with(['branch', 'house_lot','user'])->paginate(10);
         return response()->json($water_readings);
     }
 
-    public function getWaterReadingsListAjax(Request $request)
+    public function getWaterReadingsListAjax(Request $request, $branch_id = '')
     {
         if ($request->ajax()) {
-            $data = WaterMeterReading::select('water_meter_readings.id', 'house_lot.house_lot_num', 'branch.name as branch', 'house_lot.serial_num', 'current_reading', 'last_reading', 'water_meter_readings.created_at', 'users.first_name', 'image')
+            $data = WaterMeterReading::select('water_meter_readings.id', 'house_lot.house_lot_num', 'branch.name as branch', 'area.name as area', 'house_lot.serial_num', 'current_reading', 'last_reading', 'water_meter_readings.created_at', 'users.first_name', 'image')
                         ->leftJoin('house_lot', 'water_meter_readings.house_lot_id', '=', 'house_lot.id')
                         ->leftJoin('branch', 'water_meter_readings.branch_id', '=', 'branch.id')
+                        ->leftJoin('area', 'area.id', '=', 'branch.area_id')
                         ->leftJoin('users', 'water_meter_readings.user_id', '=', 'users.id');
             // $data = WaterMeterReading::with(['branch', 'house_lot','user'])->orderBy('created_at', 'desc')->get();
+            if($branch_id != '') {
+                $data->where('branch.id', '=', $branch_id);
+            }
+            // dd($data->get());
             return DataTables::of($data)
                     ->editColumn('created_at', function ($row) {
-                            return date('Y/m/d',strtotime($row->created_at));
+                            return date('Y/m/d', strtotime($row->created_at));
+                    })
+                    ->addColumn('usage', function($row) {
+                        return (int)$row->current_reading - (int)$row->last_reading;
                     })
                     ->addColumn('image', function($row) {
                         return view('admin.water_readings.includes.image', ['image' => $row->image]);
                     })
                     ->addColumn('action', function($row) {
-                        return view('admin.water_readings.includes.table_buttons', ['id' => $row->id]);
+                        $water_reading = WaterMeterReading::with(['branch', 'house_lot', 'user'])->where('id', $row->id)->first();
+                        return view('admin.water_readings.includes.table_buttons', ['id' => $row->id, 'water_reading' => $water_reading]);
                     })
                     ->rawColumns(['image', 'action'])
                     ->make(true);
         }
 
         return response()->json([false]);
+    }
+
+    public function datatable()
+    {
+        // $water_readings = WaterMeterReading::with(['branch', 'house_lot', 'user'])->get();
+        $water_readings = collect();
+        return view('admin.water_readings.datatable', compact('water_readings'));
+    }
+
+    public function getData(Request $request) {
+        // if ( $request->input('showdata') ) {
+        //     return User::orderBy('created_at', 'desc')->get();
+        // }
+        $columns = ['area.name', 'water_meter_readings.created_at'];
+        $length = $request->input('length');
+        
+        $column = 0;
+        if($request->input('length') != '') {
+            $column = $request->input('column');
+        }
+        
+        $search_input = $request->input('search');
+        // $query = User::select('name', 'email', 'created_at')
+        // ->orderBy($columns[$column]);
+
+        $query = WaterMeterReading::select('water_meter_readings.id', 'house_lot.house_lot_num', 'branch.name as branch', 'area.name as area', 'house_lot.serial_num', 'current_reading', 'last_reading', 'water_meter_readings.created_at', 'users.first_name', 'image')
+                        ->leftJoin('house_lot', 'water_meter_readings.house_lot_id', '=', 'house_lot.id')
+                        ->leftJoin('branch', 'water_meter_readings.branch_id', '=', 'branch.id')
+                        ->leftJoin('area', 'area.id', '=', 'branch.area_id')
+                        ->leftJoin('users', 'water_meter_readings.user_id', '=', 'users.id')
+                        ->orderBy($columns[$column]);
+
+        if ($search_input) {
+            $query->where(function($query) use ($search_input) {
+                $query->where('area', 'like', '%' . $search_input . '%')
+                    // ->orWhere('email', 'like', '%' . $search_input . '%')
+                    ->orWhere('created_at', 'like', '%' . $search_input . '%');
+            });
+        }
+        $users = $query->paginate($length);
+        return ['data' => $users];
     }
 
     public function create_view()
@@ -205,7 +271,7 @@ class AdminWaterReadingController extends Controller
 
         if ($updated) {
             Cookie::queue('reading_updated', true, 10);
-            return redirect()->route('admin.water_readings.index');
+            return redirect()->route('admin.water_readings.branch', $request->branch_id);
         }
         Cookie::queue('reading_not_updated', true, 10);
         return redirect()->back();

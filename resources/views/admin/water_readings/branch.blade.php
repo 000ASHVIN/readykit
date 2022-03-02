@@ -39,6 +39,7 @@
             </div>
         </div>
     </div>
+   
     <div class="datatable">
         <div class="
           table-responsive
@@ -137,9 +138,9 @@
     $(function () {
         
         var table = $('#water_reading_table').DataTable({
-            processing: true,
+            processing: false,
             serverSide: true,
-            ajax: "{{ route('admin.water_readings.list') }}",
+            ajax: "/admin/water_readings/list/"+{{ $branch_id }},
             columns: [
                 {data: 'area', name: 'area.name'},
                 {data: 'branch', name:'branch.name'},
@@ -182,7 +183,12 @@
                         return parseInt(data) > 0 ? data : '-'
                     }
                 },
-            ]
+            ],
+            // initComplete: (settings, json) => {
+            //     new window.Vue({
+            //         el: '#app'
+            //     });
+            // }
         });
         
     });

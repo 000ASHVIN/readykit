@@ -11,6 +11,28 @@
 
     <ul class="nav nav-scrolling">
 
+      <li class="nav-item" v-if="is_admin == 1">
+        <a class="nav-link"
+           href="/admin/dashboard">
+                    <span class="icon-wrapper">
+                        <app-icon name="pie-chart" class="menu-icon"/>
+                    </span>
+          <span class="menu-title">Dashboard</span>
+          <!-- <i class="menu-arrow"/> -->
+        </a>
+      </li>
+
+      <li class="nav-item" v-if="is_admin == 1">
+        <a class="nav-link"
+           href="/admin/reports">
+                    <span class="icon-wrapper">
+                        <app-icon name="pie-chart" class="menu-icon"/>
+                    </span>
+          <span class="menu-title">Reports</span>
+          <!-- <i class="menu-arrow"/> -->
+        </a>
+      </li>
+
       <li class="nav-item" v-for="(item, index) in data" :key="index" >
         <a class="nav-link"
            :href="item.id ? '#'+item.id : item.url"
@@ -101,7 +123,8 @@ export default {
     logoUrl: {
       type: String,
       default: '/'
-    }
+    },
+    is_admin: ''
   },
   mounted() {
     this.$nextTick(function () {

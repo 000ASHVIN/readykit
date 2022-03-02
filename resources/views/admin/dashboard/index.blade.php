@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Users Management')
+@section('title', 'Dashboard')
 
 @section('contents')
-<admin-dashboard>
-</admin-dashboard>
+    <admin-dashboard :branches="{{ $branches }}"></admin-dashboard>
 @endsection

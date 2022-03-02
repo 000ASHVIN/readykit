@@ -14,6 +14,6 @@ class Area extends Model
     ];
 
     public function branches(){
-        return $this->hasMany(Branch::class,'area_id','id');
+        return $this->hasMany(Branch::class, 'area_id', 'id');
     }
 }

@@ -56,6 +56,8 @@ Route::post('login', [LoginController::class, 'login'])
     ->name('users.login');
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
+    Route::get('reports', [AdminDashboardController::class, 'reports'])->name('admin.dashboard.reports');
     Route::get('get-roles', [AdminUsersController::class, 'getRoles'])->name('admin.get-roles');
 });
 
@@ -110,8 +112,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
-    // Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
     Route::get('water_readings', [AdminWaterReadingController::class, 'index'])->name('admin.water_readings.index');
+    Route::get('water_readings/{branch_id}/branch', [AdminWaterReadingController::class, 'getReadingsByBranch'])->name('admin.water_readings.branch');
     Route::get('water_readings/create', [AdminWaterReadingController::class, 'create_view'])->name('admin.water_readings.create-view');
     Route::post('water_readings/create', [AdminWaterReadingController::class, 'create'])->name('admin.water_readings.create');
     Route::get('get-water_readings', [AdminWaterReadingController::class, 'getWaterReadingsList'])->name('get.admin.water_readings');
@@ -121,7 +123,10 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('get-reading-info/{id}',[AdminWaterReadingController::class,'getReadingInfo'])->name('admin.get_reading_info');
     Route::get('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
 
-    Route::get('water_readings/list', [AdminWaterReadingController::class, 'getWaterReadingsListAjax'])->name('admin.water_readings.list');
+    Route::get('water_readings/list/{branch_id?}', [AdminWaterReadingController::class, 'getWaterReadingsListAjax'])->name('admin.water_readings.list');
+
+    Route::get('water_readings/datatable', [AdminWaterReadingController::class, 'datatable'])->name('admin.water_readings.datatable');
+    Route::get('water_readings/branch/list', [AdminWaterReadingController::class, 'getData'])->name('admin.water_readings.branch.list');
 });
 
 Route::middleware(['auth'])->group(function () {
