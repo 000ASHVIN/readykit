@@ -17,13 +17,32 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Admin\WaterMeterReading;
+use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 
 
 class User extends BaseUser implements HasLocalePreference
 {
+    use LaravelVueDatatableTrait;
+
     protected static $logAttributes = [
         'first_name', 'last_name', 'email'
     ];
+
+    protected $dataTableColumns = [
+        'first_name' => [
+            'searchable' => true,
+            'sortable'   => true
+        ],
+        'last_name' => [
+            'searchable' => true,
+            'sortable'   => true
+        ],
+        'serial_num' => [
+            'searchable' => true,
+        ],
+
+    ];
+
     protected $fillable = [
         'first_name',
         'last_name',

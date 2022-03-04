@@ -123,7 +123,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('get-reading-info/{id}',[AdminWaterReadingController::class,'getReadingInfo'])->name('admin.get_reading_info');
     Route::get('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
 
-    Route::get('water_readings/list/{branch_id?}', [AdminWaterReadingController::class, 'getWaterReadingsListAjax'])->name('admin.water_readings.list');
+    Route::get('water_readings/list/{branch_id?}', [AdminWaterReadingController::class, 'customgetWaterReadinLinst'])->name('admin.water_readings.list');
 
     Route::get('water_readings/datatable', [AdminWaterReadingController::class, 'datatable'])->name('admin.water_readings.datatable');
     Route::get('water_readings/branch/list', [AdminWaterReadingController::class, 'getData'])->name('admin.water_readings.branch.list');

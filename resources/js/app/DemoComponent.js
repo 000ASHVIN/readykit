@@ -90,7 +90,7 @@ Vue.component('admin-water_readings', require('./Components/Views/Admin/WaterRea
 Vue.component('admin-water-datatable', require('./Components/Views/Admin/WaterReading/Datatable').default);
 Vue.component('admin-water_reading-edit', require('./Components/Views/Admin/WaterReading/EditWaterReading').default);
 Vue.component('admin-water_reading-create', require('./Components/Views/Admin/WaterReading/CreateWaterReading').default);
-
+Vue.component('admin-water-readings-branch', require('./Components/Views/Admin/WaterReading/Branch').default)
 Vue.component('user-create-reading', require('./Components/Views/User/WaterTankReading/CreateReading').default);
 Vue.component('user-show-reading', require('./Components/Views/User/WaterTankReading/ShowReading').default);
 Vue.component('user-edit-reading', require('./Components/Views/User/WaterTankReading/EditReading').default);

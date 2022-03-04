@@ -57,7 +57,7 @@ class AdminBranchesController extends Controller
     {
         $branch = Branch::with('area')->find($id);
         // dd($branch);
-        return view('admin.branches.edit', compact('branch'));
+        return view('admin.branches.Edit', compact('branch'));
     }
 
     public function update(Request $request, $id)

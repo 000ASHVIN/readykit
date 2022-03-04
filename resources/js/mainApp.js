@@ -16,6 +16,10 @@ Vue.use(VueChatScroll)
 import VueSimpleAlert from "vue-simple-alert";
 Vue.use(VueSimpleAlert);
 
+import DataTable from 'laravel-vue-datatable';
+
+Vue.use(DataTable);
+
 import 'vue-search-select/dist/VueSearchSelect.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'

@@ -30,4 +30,19 @@ class Branch extends Model
     public function users() {
         return $this->hasMany(User::class, 'branch_id', 'id');
     }
+
+    protected $dataTableRelationships = [
+        "belongsTo" => [
+            "area" => [
+                "model" => Area::class,
+                "foreign_key" => "area_id",
+                "columns" => [
+                    "name" => [
+                        "searchable" => true,
+                        "orderable" => true,
+                    ],
+                ],
+            ],
+        ],
+    ];
 }
