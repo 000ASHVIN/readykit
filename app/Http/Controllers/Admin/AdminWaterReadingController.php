@@ -20,6 +20,7 @@ use DataTables;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 
+
 class AdminWaterReadingController extends Controller
 {
     protected $pdfmaker;
@@ -95,7 +96,7 @@ class AdminWaterReadingController extends Controller
         $orderBy = $request->input('column');
         $orderBydir = $request->input("dir");
         $length = $request->input('length');
-        $data = WaterMeterReading::select('water_meter_readings.id', 'house_lot.house_lot_num', 'branch.name as branch', 'area.name as area', 'house_lot.serial_num', 'current_reading', 'last_reading', 'water_meter_readings.created_at', 'users.first_name', 'image')
+        $data = WaterMeterReading::select('water_meter_readings.id', 'house_lot.house_lot_num','house_lot.id as house_lot_id','branch.id as branch_id', 'branch.name as branch', 'area.name as area', 'house_lot.serial_num', 'current_reading', 'last_reading', 'remark','water_meter_readings.created_at', 'users.first_name', 'image')
             ->leftJoin('house_lot', 'water_meter_readings.house_lot_id', '=', 'house_lot.id')
             ->leftJoin('branch', 'water_meter_readings.branch_id', '=', 'branch.id')
             ->leftJoin('area', 'area.id', '=', 'branch.area_id')
@@ -243,54 +244,37 @@ class AdminWaterReadingController extends Controller
     {
         $water_reading = WaterMeterReading::with(['branch', 'house_lot', 'user'])->where('id', $id)->first();
         // dd($water_reading);
-        return view('admin.water_readings.Edit', compact('water_reading'));
+        // \Log::info('request done'.$id);
+        return $water_reading;
+        // return view('admin.water_readings.Edit', compact('water_reading'));
     }
 
     public function update(Request $request, $id)
     {
         // dd($request->all());
+        
+
+
         $validator = Validator::make($request->all(), [
-            'image' => 'image:jpg,jpeg,png',
+            'image' => 'nullable|image:jpg,jpeg,png',
             'current_reading' => 'required|max:50',
             'serial_num' => 'required',
             'house_lot_id' => 'required|exists:house_lot,id',
             'branch_id' => 'required|exists:branch,id'
         ]);
 
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            if ($errors->get('branch_id')) {
-                Cookie::queue('error_for_create_reading_field', 'Branch', 10);
-                Cookie::queue('error_for_create_reading', $errors->get('branch_id')[0], 10);
-            }
-            if ($errors->get('current_reading')) {
-                Cookie::queue('error_for_create_reading_field', 'Current Reading', 10);
-                Cookie::queue('error_for_create_reading', $errors->get('current_reading')[0], 10);
-            }
-            if ($errors->get('house_lot_id')) {
-                Cookie::queue('error_for_create_reading_field', 'House Lot', 10);
-                Cookie::queue('error_for_create_reading', $errors->get('house_lot_id')[0], 10);
-            }
-            if ($errors->get('serial_num')) {
-                Cookie::queue('error_for_create_reading_field', 'Serial No', 10);
-                Cookie::queue('error_for_create_reading', $errors->get('serial_num')[0], 10);
-            }
-            if ($errors->get('image')) {
-                Cookie::queue('error_for_create_reading_field', 'Reading Image', 10);
-                Cookie::queue('error_for_create_reading', $errors->get('image')[0], 10);
-            }
-            return redirect()->route('admin.water_reading-edit', $id);
+        $errors=[];
+        if($validator->fails()){
+          return response($validator->errors(),422);
         }
-
         $old = WaterMeterReading::find($id);
-
         if ($request->image) {
             $destination_path = 'public/images/meter_readings';
             $image = $request->file('image');
             $image_name = "reading_" . Carbon::now()->format('YmdHs') . "." . $image->getClientOriginalExtension();
             $path = $image->storeAs($destination_path, $image_name);
-            if (File::exists(public_path("storage\images\meter_readings\\" . $old->image))) {
-                File::delete(public_path("storage\images\meter_readings\\" . $old->image));
+            if (File::exists(public_path("storage/images/meter_readings/".$old->image))) {
+                File::delete(public_path("storage/images/meter_readings/" .$old->image));
             }
             $updated = WaterMeterReading::find($id)->update([
                 'house_lot_id' => $request->house_lot_id,
@@ -313,11 +297,9 @@ class AdminWaterReadingController extends Controller
         }
 
         if ($updated) {
-            Cookie::queue('reading_updated', true, 10);
-            return redirect()->route('admin.water_readings.branch', $request->branch_id);
+            return response()->json(['updated'=>'updated successfully']);
         }
-        Cookie::queue('reading_not_updated', true, 10);
-        return redirect()->back();
+        return response()->json(['error'=>'backend error']);
     }
 
     public function delete($id)

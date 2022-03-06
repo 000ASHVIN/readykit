@@ -20,7 +20,7 @@ class BranchController extends Controller
         $branch = Branch::find($id);
         if($branch) {
             $houseLots = $branch->houseLot;
-            return response()->json([$houseLots]);
+            return $houseLots;
         }
         return json_encode(false);
     }
