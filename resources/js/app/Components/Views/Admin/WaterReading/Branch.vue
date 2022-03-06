@@ -6,36 +6,7 @@
       :per-page="['10', '20']"
       :classes="classes"
     >
-      <div
-        slot="pagination"
-        slot-scope="{ links = {}, meta = {} }"
-        class="container mr-6"
-      >
-        <nav class="row">
-          <div class="col-md-6 text-left">
-            <span>
-              Showing {{ meta.from }} to {{ meta.to }} of
-              {{ meta.total }} Entries
-            </span>
-          </div>
-          <div class="col-md-6 text-right">
-            <button
-              :disabled="!links.prev"
-              class="btn btn-primary"
-              @click="url = links.prev"
-            >
-              Prev
-            </button>
-            <button
-              :disabled="!links.next"
-              class="btn btn-primary ml-2"
-              @click="url = links.next"
-            >
-              Next
-            </button>
-          </div>
-        </nav>
-      </div>
+      
     </data-table>
     <edit-water-reading-modal
       :water_reading="water_reading"
