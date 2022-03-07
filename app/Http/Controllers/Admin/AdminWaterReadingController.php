@@ -329,10 +329,14 @@ class AdminWaterReadingController extends Controller
         return $pdf->download('water_reading_' . Carbon::now()->format('YmdHs') . '.pdf');
     }
 
-    public function getAllExportData()
+    public function getAllExportData(Request $request)
     {
-
-        $water_readings = WaterMeterReading::with(['branch', 'house_lot'])->get();
+        $startDate = Carbon::parse($request->startDate);
+        $endDate  = Carbon::parse($request->endDate);
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot'])
+        ->whereDate('created_at','<=',$endDate)
+        ->whereDate('created_at','>=',$startDate)
+        ->get();
         $all_records = [
             [
                 'House Lot',

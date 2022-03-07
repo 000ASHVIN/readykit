@@ -112,6 +112,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
+    Route::post('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
+
     Route::get('water_readings', [AdminWaterReadingController::class, 'index'])->name('admin.water_readings.index');
     Route::get('water_readings/{branch_id}/branch', [AdminWaterReadingController::class, 'getReadingsByBranch'])->name('admin.water_readings.branch');
     Route::get('water_readings/create', [AdminWaterReadingController::class, 'create_view'])->name('admin.water_readings.create-view');
@@ -121,7 +123,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::post('water_readings/{id}/update', [AdminWaterReadingController::class, 'update'])->name('admin.water_reading-update');
     Route::get('water_readings/{id}/delete', [AdminWaterReadingController::class, 'delete'])->name('admin.water_reading-delete');
     Route::get('get-reading-info/{id}',[AdminWaterReadingController::class,'getReadingInfo'])->name('admin.get_reading_info');
-    Route::get('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
 
     Route::get('water_readings/list/{branch_id?}', [AdminWaterReadingController::class, 'customgetWaterReadinLinst'])->name('admin.water_readings.list');
 

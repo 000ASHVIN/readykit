@@ -253,7 +253,7 @@ export default {
           searchable: false,
           orderable: true,
         },
-        { label: "Date Submitted", name: "created_at", orderable: true },
+        { label: "Date Submitted", name: "created_at", orderable: true},
         {
           label: "Image",
           name: "image",
