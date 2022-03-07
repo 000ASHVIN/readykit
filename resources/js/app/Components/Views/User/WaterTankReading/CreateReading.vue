@@ -330,7 +330,7 @@ export default {
     async getHouseLotList(branch_id){
       await this.axiosGet("/branch/"+ branch_id + "/house_lots")
       .then((response) => {
-        let data = response.data[0];
+        let data = response.data;
         data.forEach(houseLot => {
           this.houseLotList.push({
             value: houseLot.id,

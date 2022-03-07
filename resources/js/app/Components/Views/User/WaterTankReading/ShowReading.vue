@@ -29,7 +29,7 @@
             </div> -->
             <div class="align-items-center row">
               <p><span class="col-md-6">Image</span>
-              <img class="col-md-6" :src="base_url+'/storage/images/meter_readings/'+water_reading.image" alt="" height="250" width="250">
+                <img class="col-md-6" :src="water_reading.image" alt="" height="250" width="250">
               </p>
             </div>
             <div class="align-items-center row">
