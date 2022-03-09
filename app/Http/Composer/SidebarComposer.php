@@ -104,6 +104,20 @@ class SidebarComposer
             'multiple' => 1,
         ];
         $list_of_area_menu = [];
+        $report_landing = [
+            'id' => 'reports-0',
+            'icon' => 'pie-chart',
+            'name' => 'Reports',
+            'permission' => '',
+            'subMenu' => [
+                [
+                    'name' => 'Landing Page',
+                    'url'  => '/admin/reports',
+                    'permission' => '',
+                ]
+            ]
+        ];
+        array_push($list_of_area_menu, $report_landing);
         foreach ($areas as $area) {
             $area_menu  = [
                 'id' => 'reports' . $area->id,

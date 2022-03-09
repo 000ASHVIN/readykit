@@ -23,7 +23,7 @@
                 </div>
                 <div class="card">
                   <div class="card-body">
-                    <span class="total_houselot">{{ branch.total_houselot }}</span>
+                    <span class="total_houselot">{{ branch.total_houselot > 0 ? branch.total_houselot : 0 }}</span>
                     <span class="unit">Unit of Houses</span>
                   </div>
                 </div>

@@ -3,7 +3,7 @@
    
     <div class="breadcrumb-side-button">
       <div class="float-md-right mb-3 mb-sm-3 mb-md-0 ml-3">
-        <a class="btn btn-primary btn-with-shadow" href="/admin/get-all-export-data">
+        <a class="btn btn-info btn-with-shadow" :href="'/admin/water_readings/branch/export/'+branch_id+'/all'">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -20,7 +20,7 @@
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          Export Alll Data
+          Export All Data
         </a>
       </div>
        <div class="breadcrumb-side-button">

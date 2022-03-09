@@ -8,7 +8,7 @@
             <h2 class="mb-0">Water Tank Readings</h2>
         </div>
         <export :branch_id="{{$branch_id}}"></export>
-        <div class="col-sm-12">
+        {{-- <div class="col-sm-12">
             <div class="float-right">
                 <a class="btn btn-info btn-with-shadow" href="/admin/water_readings/branch/export/{{$branch_id}}/all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download">
@@ -18,7 +18,7 @@
                     </svg> Export All Data
                 </a>      
             </div>  
-        </div>       
+        </div>        --}}
     </div>
    
     <div class="datatable">

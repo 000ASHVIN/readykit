@@ -13,13 +13,12 @@
                         <p> <span style="font-weight: 600;">S/N</span> : {{ $house_lot ? $house_lot->serial_num : 'N/A' }}</p>
                         <p> <span style="font-weight: 600;">Current reading</span> : {{ $water_reading->current_reading }}</p>
                         <p> <span style="font-weight: 600;">Last Reading</span> : {{ $water_reading->last_reading ?? 'not available' }}</p>
-                        <p> <span style="font-weight: 600;">Date Submitted</span> : {{ \Carbon\Carbon::parse($water_reading->created_at)->format('m/d/Y') }}</p>
+                        <p> 
+                            <span style="font-weight: 600;">Usage</span> : {{ $water_reading->current_reading - $water_reading->last_reading }}
+                        </p>
+                        <p> <span style="font-weight: 600;">Date Submitted</span> : {{ \Carbon\Carbon::parse($water_reading->created_at)->format('Y/m/d h:i A') }}</p>
                         <p> <span style="font-weight: 600;">Image</span> </p>
-                        @php
-                            $name = explode('\\', $water_reading->image);
-                            $image = $name[count($name) - 1];
-                        @endphp
-                        <p> <img src="storage/images/meter_readings/{{ $image }}" alt="not available"></p>
+                        <p> <img src="{{ public_path('/storage/images/meter_readings/' .$water_reading->image) }}" alt="not available"></p>
                         
                         <p> <span style="font-weight: 600;">Remark</span> : {{ $water_reading->remark ?? 'not available' }}</p>
                     </div>

@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use App\Models\Core\Auth\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,11 @@ class WaterMeterReading extends Model
 
     protected $table = "water_meter_readings";
     protected $appends = ['usage'];
+
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
 
     public function getUsageAttribute()
     {
@@ -46,10 +52,16 @@ class WaterMeterReading extends Model
          return $value;  
     }
 
+    public function getCreatedAtAttribute($value)
+    {
+        // return Carbon::parse($value)->format('Y/m/d h:i A');
+        return date('Y-m-d h:i A', strtotime($value));
+        // return date_format(date_create($value), 'Y-m-d h:i A');
+    }
 
-    protected $casts = [
-        'created_at' => 'datetime:Y/m/d h:i:s A',
-    ];
+    // protected $casts = [
+    //     'created_at' => 'datetime:Y/m/d h:i:s A',
+    // ];
 
     protected $dataTableColumns = [
         'last_reading' => [
