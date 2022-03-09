@@ -8,7 +8,7 @@
             <h5 class="card-title m-0">Add Reading</h5>
           </div>
           <div class="card-body">
-            <form id="create-reading-form" method="post" action="/create-reading" enctype="multipart/form-data" class="mb-0">
+            <form id="create-reading-form" method="POST" action="/create-reading" enctype="multipart/form-data" class="mb-0">
               <div class="form-group row align-items-center">
                 <label class="col-md-2 mb-md-0"> Current Branch </label>
                 <div class="col-md-8">
@@ -109,6 +109,28 @@
                 </div>
               </div>
               <div class="form-group row align-items-center">
+                <label class="col-md-2 mb-md-0"> Last Reading </label>
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    name="last_reading"
+                    max="30"
+                    placeholder="Meter Last Reading"
+                    autocomplete="off"
+                    class="form-control disabled"
+                    v-model="last_reading"
+                  />
+                  <div>
+                    <small
+                      class="text-danger validation-error"
+                      v-if="this.error.last_reading"
+                    >
+                      {{ this.error.last_reading }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row align-items-center">
                 <label class="col-md-2 mb-md-0"> Current Reading </label>
                 <div class="col-md-8">
                   <input
@@ -198,6 +220,7 @@ export default {
       serial_no: "",
       house_lot_no: "",
       house_lot_id: "",
+      last_reading: 0,
       current_reading: "",
       serial_no_process:false,
       serial_no_done:false,
@@ -208,6 +231,7 @@ export default {
         branch: "",
         serial_no: "",
         house_lot_no: "",
+        last_reading: "",
         current_reading: "",
         meter_picture: "",
       },
@@ -248,6 +272,10 @@ export default {
         is_error = true;
         this.error.house_lot_no = "House lot is required";
       }
+      // if (this.last_reading == "" && !this.last_reading) {
+      //   is_error = true;
+      //   this.error.last_reading = "Last Reading is required";
+      // }
       if (this.current_reading == "" && !this.current_reading) {
         is_error = true;
         this.error.current_reading = "Current Reading is required";
@@ -279,30 +307,6 @@ export default {
           console.log(response);
         });
     },
-    // getHouseLot(){
-    //     this.serial_no_done = false;
-    //     this.serial_no_process = true;
-    //     this.serial_no_invalid =false;
-    //     this.axiosGet("/get-houselot/" + this.serial_no)
-    //     .then((response) => {
-    //       if (response.data) {
-    //         this.error.serial_no = "";
-    //         this.error.house_lot_no = "";
-    //         this.serial_no_process = false;
-    //         this.serial_no_done = true;
-    //         this.house_lot_data = response.data;
-    //         this.house_lot_id = this.house_lot_data.id;
-    //         this.house_lot_no = this.house_lot_data.house_lot_num;
-    //       }
-    //     })
-    //     .catch(({ response }) => {
-    //       this.serial_no_process = false;
-    //       this.serial_no_invalid = true;
-    //       this.error.serial_no = "Enter Valid Serial number";
-    //       this.house_lot_no = '';
-    //     });
-      
-    // },
     getSerialNum(){
       this.serial_no_done = false;
       this.serial_no_process = true;
@@ -310,7 +314,7 @@ export default {
       this.axiosGet("/get-serialnum/" + this.house_lot_no)
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
+          // console.log(response.data);
           this.error.serial_no = "";
           this.error.house_lot_no = "";
           this.serial_no_process = false;
@@ -318,6 +322,8 @@ export default {
           this.house_lot_data = response.data;
           this.serial_no = this.house_lot_data.serial_num
           this.house_lot_id = this.house_lot_data.id;
+
+          this.getLastReading(this.serial_no);
         }
       })
       .catch(({ response }) => {
@@ -325,6 +331,16 @@ export default {
         this.serial_no_invalid = true;
         this.error.house_lot_no = "Enter Valid House lot number";
         this.serial_no = '';
+      });
+    },
+    async getLastReading(serial_no){
+      await this.axiosGet("/water_readings/" + serial_no + "/last")
+      .then((response) => {
+        this.last_reading = response.data;
+        // console.log(this.last_reading)
+      })
+      .catch(({error}) => {
+        console.log(error);
       });
     },
     async getHouseLotList(branch_id){

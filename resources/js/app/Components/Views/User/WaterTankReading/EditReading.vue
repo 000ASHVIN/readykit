@@ -168,11 +168,7 @@
                       <img
                         class="image-area d-flex"
                         id="output"
-                        :src="
-                          base_url +
-                          '/storage/images/meter_readings/' +
-                          water_reading.image
-                        "
+                        :src="water_reading.image"
                       />
                       <div class="input-area">
                         <label id="upload-label" for="inputs_custom_file">

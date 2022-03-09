@@ -15,7 +15,12 @@
                         <p> <span style="font-weight: 600;">Last Reading</span> : {{ $water_reading->last_reading ?? 'not available' }}</p>
                         <p> <span style="font-weight: 600;">Date Submitted</span> : {{ \Carbon\Carbon::parse($water_reading->created_at)->format('m/d/Y') }}</p>
                         <p> <span style="font-weight: 600;">Image</span> </p>
-                        <p> <img src="{{ public_path('/storage/images/meter_readings/' .$water_reading->image) }}" alt="not available"></p>
+                        @php
+                            $name = explode('\\', $water_reading->image);
+                            $image = $name[count($name) - 1];
+                        @endphp
+                        <p> <img src="storage/images/meter_readings/{{ $image }}" alt="not available"></p>
+                        
                         <p> <span style="font-weight: 600;">Remark</span> : {{ $water_reading->remark ?? 'not available' }}</p>
                     </div>
                 </div>

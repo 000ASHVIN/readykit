@@ -128,6 +128,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 
     Route::get('water_readings/datatable', [AdminWaterReadingController::class, 'datatable'])->name('admin.water_readings.datatable');
     Route::get('water_readings/branch/list', [AdminWaterReadingController::class, 'getData'])->name('admin.water_readings.branch.list');
+    Route::post('water_readings/branch/export/{branch_id}',[AdminWaterReadingController::class,'exportDataByBranchAndDate'])->name('admin.water_readings.branch.export');
+    Route::get('water_readings/branch/export/{branch_id}/all',[AdminWaterReadingController::class,'exportDataByBranchAll'])->name('admin.water_readings.branch.export');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -140,6 +142,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('update-reading/{id}', [WaterTankReadingsController::class, 'update'])->name('update.reading');
 
     Route::get('branch/{id}/house_lots', [BranchController::class, 'getHouseLotsList'])->name('branch.houselot.list');
+    Route::get('water_readings/{serial_no}/last', [WaterTankReadingsController::class, 'getLastReading'])->name('water_readings.last');
 });
 
 /**

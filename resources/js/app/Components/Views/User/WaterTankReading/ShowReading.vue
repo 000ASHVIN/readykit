@@ -10,30 +10,65 @@
           </div>
           <div class="card-body align-items-center col-md-12">
             <div class="align-items-center row">
-              <p><span class="col-md-5">House Lot</span><span class="col-md-5">{{ house_lot.house_lot_num }}</span> </p>
+              <div class="col-2">
+                <p><strong>House Lot:</strong></p>
+              </div>
+              <div class="col-10">
+                <p>{{ house_lot.house_lot_num }}</p>
+              </div>
             </div>
             <div class="align-items-center row">
-              <p><span class="col-md-6">Branch</span><span class="col-md-6">{{ branch.name }}</span> </p>
+              <div class="col-2">
+                <p><strong>Branch:</strong></p>
+              </div>
+              <div class="col-10">
+                <p>{{ branch.name }}</p>
+              </div>
             </div>
             <div class="align-items-center row">
-              <p><span class="col-md-6">S/N</span><span class="col-md-6">{{ water_reading.serial_num }}</span> </p>
+              <div class="col-2">
+                <p><strong>S/N:</strong></p>
+              </div>
+              <div class="col-10">
+                <p>{{ water_reading.serial_num }}</p>
+              </div>
             </div>
             <div class="align-items-center row">
-              <p><span class="col-md-6">Curr. Reading</span><span class="col-md-6">{{ water_reading.current_reading }}</span> </p>
+              <div class="col-2">
+                <p><strong>Curr. Reading:</strong></p>
+              </div>
+              <div class="col-10">
+                <p>{{ water_reading.current_reading }}</p>
+              </div>
+              
             </div>
             <div class="align-items-center row">
-              <p><span class="col-md-6">Last Reading</span><span class="col-md-6">{{ water_reading.last_reading }}</span> </p>
+              <div class="col-2">
+                <p><strong>Last Reading:</strong></p>
+              </div>
+              <div class="col-10">
+                <p>{{ water_reading.last_reading }}</p>
+              </div>
+              
             </div>
             <!-- <div class="align-items-center row">
               <p><span class="col-md-6">Date Submitted</span><span class="col-md-6">{{ water_reading.last_reading ? water_reading.last_reading :'-' }}</span> </p>
             </div> -->
             <div class="align-items-center row">
-              <p><span class="col-md-6">Image</span>
-                <img class="col-md-6" :src="water_reading.image" alt="" height="250" width="250">
-              </p>
+              <div class="col-2">
+                <p><strong>Image:</strong></p>
+              </div>
+              <div class="col-10">
+                <img :src="water_reading.image" alt="" style="width: 250px;">
+              </div>
             </div>
             <div class="align-items-center row">
-              <p><span class="col-md-6">Remark</span><span class="col-md-6">{{ water_reading.remark ? water_reading.remark :'N/A' }}</span> </p>
+              <div class="col-2">
+                <p><strong>Remark:</strong></p>
+              </div>
+              <div class="col-10">
+                <p>{{ water_reading.remark ? water_reading.remark :'N/A' }}</p>
+              </div>
             </div>
             
            

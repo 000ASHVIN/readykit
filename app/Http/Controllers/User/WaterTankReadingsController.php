@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Helpers\App\General\UploadImage;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Branch;
 use App\Models\Admin\HouseLot;
@@ -38,6 +39,7 @@ class WaterTankReadingsController extends Controller
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'image' => 'required|image:jpg,jpeg,png',
+            // 'last_reading' => 'required|max:50',
             'current_reading' => 'required|max:50',
             'serial_num' => 'required',
             'house_lot_id' => 'required|exists:house_lot,id',
@@ -66,24 +68,17 @@ class WaterTankReadingsController extends Controller
                 Cookie::queue('error_for_create_reading_field', 'Reading Image', 10);
                 Cookie::queue('error_for_create_reading', $errors->get('image')[0], 10);
             }
-            return redirect()->route('create.reading');
+            return redirect()->back();
         } 
 
-        if($last_reading = WaterMeterReading::where('serial_num',$request->serial_num)->latest()->first()){
-            $request->merge(['last_reading' => $last_reading->current_reading]);
-        }
+        // if($last_reading = WaterMeterReading::where('serial_num',$request->serial_num)->latest()->first()){
+        //     $request->merge(['last_reading' => $last_reading->current_reading]);
+        // }
         
-        $destination_path = 'public/images/meter_readings/';
         $image = $request->file('image');
-        $image_name = "reading_" . Carbon::now()->format('YmdHs') . "." . $image->getClientOriginalExtension();
-        $img = Image::make($image->path());
-        $img->resize(350, 350, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        // $img->resize(350, 350);
-        $img->stream();
-        // ->save(storage_path($destination_path . $image_name) );
-        Storage::put($destination_path . $image_name, $img);
+        $upload = new UploadImage;
+        $image_name = $upload->upload('meter_readings', $image);
+        
         $request->merge(['image_name' => $image_name]);
 
         $water_reading = WaterMeterReading::create([
@@ -92,7 +87,7 @@ class WaterTankReadingsController extends Controller
             'branch_id' => $request->branch_id,
             'serial_num' => $request->serial_num,
             'current_reading' => $request->current_reading,
-            'last_reading' => $request->last_reading ? $request->last_reading : null ,
+            'last_reading' => $request->last_reading,
             'image' => $request->image_name
         ]);
 
@@ -144,13 +139,15 @@ class WaterTankReadingsController extends Controller
         $old = WaterMeterReading::find($id);
 
         if ($request->image) {
-            $destination_path = 'public/images/meter_readings';
             $image = $request->file('image');
-            $image_name = "reading_" . Carbon::now()->format('YmdHs') . "." . $image->getClientOriginalExtension();
-            $path = $image->storeAs($destination_path, $image_name);
+
             if (File::exists(public_path("storage\images\meter_readings\\" . $old->image))) {
                 File::delete(public_path("storage\images\meter_readings\\" . $old->image));
             }
+
+            $upload = new UploadImage;
+            $image_name = $upload->upload('meter_readings', $image);
+
             $updated = WaterMeterReading::find($id)->update([
                 'house_lot_id' => $request->house_lot_id,
                 'branch_id' => $request->branch_id,
@@ -177,5 +174,14 @@ class WaterTankReadingsController extends Controller
         }
         Cookie::queue('reading_not_updated', true, 10);
         return redirect()->back();
+    }
+
+    public function getLastReading($serial_no) {
+        $reading = WaterMeterReading::where('serial_num', $serial_no)->latest()->first();
+        $last_reading = 0;
+        if($reading) {
+            $last_reading = $reading->current_reading;
+        }
+        return response()->json($last_reading);
     }
 }

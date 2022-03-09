@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use App\Exports\WaterReadingExport;
+use App\Helpers\App\General\UploadImage;
 use App\Models\Core\Auth\User;
 use Maatwebsite\Excel\Facades\Excel;
 use DataTables;
@@ -221,8 +222,8 @@ class AdminWaterReadingController extends Controller
 
         $destination_path = 'public/images/meter_readings';
         $image = $request->file('image');
-        $image_name = "reading_" . Carbon::now()->format('YmdHs') . "." . $image->getClientOriginalExtension();
-        $path = $image->storeAs($destination_path, $image_name);
+        $upload = new UploadImage;
+        $image_name = $upload->upload('meter_readings', $image);
         $request->merge(['image_name' => $image_name]);
 
         WaterMeterReading::create([
@@ -251,10 +252,6 @@ class AdminWaterReadingController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        
-
-
         $validator = Validator::make($request->all(), [
             'image' => 'nullable|image:jpg,jpeg,png',
             'current_reading' => 'required|max:50',
@@ -269,13 +266,14 @@ class AdminWaterReadingController extends Controller
         }
         $old = WaterMeterReading::find($id);
         if ($request->image) {
-            $destination_path = 'public/images/meter_readings';
+            
             $image = $request->file('image');
-            $image_name = "reading_" . Carbon::now()->format('YmdHs') . "." . $image->getClientOriginalExtension();
-            $path = $image->storeAs($destination_path, $image_name);
             if (File::exists(public_path("storage/images/meter_readings/".$old->image))) {
                 File::delete(public_path("storage/images/meter_readings/" .$old->image));
             }
+            $upload = new UploadImage;
+            $image_name = $upload->upload('meter_readings', $image);
+
             $updated = WaterMeterReading::find($id)->update([
                 'house_lot_id' => $request->house_lot_id,
                 'branch_id' => $request->branch_id,
@@ -320,9 +318,14 @@ class AdminWaterReadingController extends Controller
     public function getReadingInfo($id)
     {
         $data = [];
-        $data['water_reading'] = WaterMeterReading::find($id);
-        $data['branch'] = Branch::find($data['water_reading']->branch_id);
-        $data['house_lot'] = HouseLot::find($data['water_reading']->house_lot_id);
+        $data['water_reading'] = $water_reading = WaterMeterReading::find($id);
+        $name = explode('\\', $water_reading->image);
+        $image = $name[count($name) - 1];
+        
+        // dd($image);
+        $data['branch'] = $branch = Branch::find($data['water_reading']->branch_id);
+        $data['house_lot'] = $house_lot = HouseLot::find($data['water_reading']->house_lot_id);
+        // return view('report.water_reading_info', compact('water_reading', 'branch', 'house_lot'));
         $pdf = new PDF();
         $pdf = PDF::loadView('report.water_reading_info', $data);
 
@@ -366,6 +369,61 @@ class AdminWaterReadingController extends Controller
 
         $export = new WaterReadingExport($all_records);
         return Excel::download($export, 'Water_readings.xlsx');
+    }
+
+    public function exportDataByBranchAndDate(Request $request, $branch_id)
+    {
+        $startDate = Carbon::parse($request->startDate);
+        $endDate  = Carbon::parse($request->endDate);
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot'])
+        ->where('branch_id', $branch_id)
+        ->whereDate('created_at','<=',$endDate)
+        ->whereDate('created_at','>=',$startDate)
+        ->get();
+        
+        return $this->export($water_readings);
+    }
+
+    public function exportDataByBranchAll($branch_id)
+    {
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot'])
+        ->where('branch_id', $branch_id)
+        ->get();
+        
+        return $this->export($water_readings);
+    }
+
+    public function export($water_readings) {
+        $all_records = [
+            [
+                'House Lot',
+                'Branch',
+                'Serial No',
+                'Current Reading',
+                'Last Reading',
+                'Date Submitted',
+                'Image uploaded',
+                'Remark',
+            ]
+        ];
+        foreach ($water_readings as $reading) {
+            // dd(Carbon::parse($reading->created_at)->format('d/m/Y h:m'));
+            $record = [
+                $reading->house_lot ? $reading->house_lot->house_lot_num : 'N/A',
+                $reading->branch ? $reading->branch->name : 'N/A',
+                $reading->serial_num,
+                $reading->current_reading,
+                $reading->last_reading ?? 'N/A',
+                Carbon::parse($reading->created_at)->format('d/m/Y h:m'),
+                $reading->image ? 'yes' : 'no',
+                $reading->remark ?? 'N/A'
+            ];
+            array_push($all_records, $record);
+        }
+
+        $export = new WaterReadingExport($all_records);
+        $file_name = $reading->branch ? "{$reading->branch->name} Water Readings.xlsx" : "Water Readings.xlsx";
+        return Excel::download($export, $file_name);
     }
 
     // public function get
