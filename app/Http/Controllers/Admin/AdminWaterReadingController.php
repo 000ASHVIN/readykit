@@ -329,7 +329,42 @@ class AdminWaterReadingController extends Controller
         return $pdf->download('water_reading_' . Carbon::now()->format('YmdHs') . '.pdf');
     }
 
-    public function getAllExportData(Request $request)
+    public function getAllExportData()
+    {
+
+        $water_readings = WaterMeterReading::with(['branch', 'house_lot'])->get();
+        $all_records = [
+            [
+                'House Lot',
+                'Branch',
+                'Serial No',
+                'Current Reading',
+                'Last Reading',
+                'Date Submitted',
+                'Image uploaded',
+                'Remark',
+            ]
+        ];
+        foreach ($water_readings as $reading) {
+            // dd(Carbon::parse($reading->created_at)->format('d/m/Y h:m'));
+            $record = [
+                $reading->house_lot ? $reading->house_lot->house_lot_num : 'N/A',
+                $reading->branch ? $reading->branch->name : 'N/A',
+                $reading->serial_num,
+                $reading->current_reading,
+                $reading->last_reading ?? 'N/A',
+                Carbon::parse($reading->created_at)->format('d/m/Y h:m'),
+                $reading->image ? 'yes' : 'no',
+                $reading->remark ?? 'N/A'
+            ];
+            array_push($all_records, $record);
+        }
+
+        $export = new WaterReadingExport($all_records);
+        return Excel::download($export, 'Water_readings.xlsx');
+    }
+
+    public function getExportByDate(Request $request)
     {
         $startDate = Carbon::parse($request->startDate);
         $endDate  = Carbon::parse($request->endDate);
@@ -365,7 +400,7 @@ class AdminWaterReadingController extends Controller
         }
 
         $export = new WaterReadingExport($all_records);
-        return Excel::download($export, 'Water_readings.xlsx');
+        return Excel::download($export, 'Water_readings.xlsx');   
     }
 
     // public function get

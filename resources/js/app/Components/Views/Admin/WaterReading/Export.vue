@@ -1,7 +1,30 @@
 <template>
-  <div class="col-sm-12 col-md-6">
+  <div class="col-sm-12 col-md-8">
+   
     <div class="breadcrumb-side-button">
-      <div class="float-md-right mb-3 mb-sm-3 mb-md-0">
+      <div class="float-md-right mb-3 mb-sm-3 mb-md-0 ml-3">
+        <a class="btn btn-primary btn-with-shadow" href="/admin/get-all-export-data">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-download"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export Alll Data
+        </a>
+      </div>
+       <div class="breadcrumb-side-button">
+      <div class="float-md-right mb-3 mb-sm-3 mb-md-0 ">
         <button class="btn btn-primary btn-with-shadow" @click="download">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -19,9 +42,10 @@
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          Export All data
+          Export By Date
         </button>
       </div>
+    </div>
     </div>
     <date-range-picker
       ref="picker"
@@ -47,7 +71,7 @@
 <script>
 import DateRangePicker from "vue2-daterange-picker";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
-import { dateFormat } from  "./dateFormat.js";
+import { dateFormat } from "./dateFormat.js";
 
 export default {
   components: { DateRangePicker },
@@ -62,55 +86,52 @@ export default {
         startDate: new Date(),
         endDate: new Date(),
       },
-    newdateRange:{
-      startDate:null,
-      endDate:null,
-    }
-  };
+      newdateRange: {
+        startDate: null,
+        endDate: null,
+      },
+    };
   },
   methods: {
     updateValues() {},
     logEvent(message, event) {},
-    fromdateFormatLocal(date){
-      this.newdateRange.startDate=dateFormat(date,"mmmm dd yyyy")
+    fromdateFormatLocal(date) {
+      this.newdateRange.startDate = dateFormat(date, "mmmm dd yyyy");
       return this.newdateRange.startDate;
     },
-    enddateFormatLocal(date){
-       this.newdateRange.endDate=dateFormat(date,"mmmm dd yyyy")
-       return this.newdateRange.endDate;
+    enddateFormatLocal(date) {
+      this.newdateRange.endDate = dateFormat(date, "mmmm dd yyyy");
+      return this.newdateRange.endDate;
     },
-    dateLoLocalString(date){
-       return date.toLocaleDateString("en-US");
+    dateLoLocalString(date) {
+      return date.toLocaleDateString("en-US");
     },
-    download(){
-      let self    = this;
+    download() {
+      let self = this;
       let form = {
-        startDate:self.newdateRange.startDate,
-        endDate:self.newdateRange.endDate
-      }
+        startDate: self.newdateRange.startDate,
+        endDate: self.newdateRange.endDate,
+      };
       axios({
-  method: 'post',
-  url:'/admin/get-all-export-data',
-  responseType:'arraybuffer',
-  data:form
-}).then(function(response){
-                          //  console.log(form);
-                           let blob = new Blob([response.data], {
-                            
-                           })
-                        let link = document.createElement('a')
-                        link.href = window.URL.createObjectURL(blob)
-                        link.download = 'Water_readings.xlsx'
-                        link.click()
-
-      }).catch(function(response){
-        console.log(response);  
-      });
-      
-
-    }
+        method: "post",
+        url: "/admin/get-all-export-data-by-date",
+        responseType: "arraybuffer",
+        data: form,
+      })
+        .then(function (response) {
+          //  console.log(form);
+          let blob = new Blob([response.data], {});
+          let link = document.createElement("a");
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "Water_readings.xlsx";
+          link.click();
+        })
+        .catch(function (response) {
+          console.log(response);
+        });
+    },
   },
- };
+};
 </script>
 
 <style scoped>
