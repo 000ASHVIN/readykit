@@ -5,6 +5,7 @@ namespace App\Models\Admin;
 use App\Models\Core\Auth\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 
 
@@ -23,6 +24,9 @@ class WaterMeterReading extends Model
 
     public function getImageAttribute($value)
     {
+        if(Route::currentRouteName() == 'admin.get_reading_info'){
+            return $value;
+        }
         return asset('storage\images\meter_readings\\' . $value);
     }
 

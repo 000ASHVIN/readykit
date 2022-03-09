@@ -112,7 +112,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
-    Route::post('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
+    Route::get('get-all-export-data',[AdminWaterReadingController::class,'getAllExportData'])->name('admin.get_export_data');
+    Route::post('get-all-export-data-by-date',[AdminWaterReadingController::class,'getExportByDate'])->name('admin.get_export_data_date');
 
     Route::get('water_readings', [AdminWaterReadingController::class, 'index'])->name('admin.water_readings.index');
     Route::get('water_readings/{branch_id}/branch', [AdminWaterReadingController::class, 'getReadingsByBranch'])->name('admin.water_readings.branch');

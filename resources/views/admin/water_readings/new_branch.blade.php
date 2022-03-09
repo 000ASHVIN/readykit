@@ -4,7 +4,7 @@
 @section('contents')
 <div class="content-wrapper">
     <div class="row" style="margin-bottom: 30px;">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-4">
             <h2 class="mb-0">Water Tank Readings</h2>
         </div>
         <export :branch_id="{{$branch_id}}"></export>
