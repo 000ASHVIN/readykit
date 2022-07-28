@@ -15,6 +15,7 @@
                     v-for="t in Object.keys(all_tags)"
                     @click="insertAtCaret('database-template-title', t)"
                     :title="tags[t]"
+                    :key="t"
             >{{ t }}</button>
         </div>
     </form>
