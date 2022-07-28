@@ -20,6 +20,7 @@ class LoginController extends Controller
 
     public function show()
     {
+        // dd(env('DB_HOST'));
         $recaptcha = $this->getReCaptcha();
         return view('auth.login', $recaptcha);
     }

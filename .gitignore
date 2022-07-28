@@ -2,7 +2,7 @@
 /node_modules
 /public/hot
 /public/css/
-/public/js/
+# /public/js/
 /public/storage
 /storage/*.key
 /.idea
@@ -29,8 +29,8 @@ output.txt
 coverage.xml
 /coverage
 .phpunit.result.cache
-/public/js/backend.js
-/public/js/frontend.js
+# /public/js/backend.js
+# /public/js/frontend.js
 /config/telescope.php
 /resources/sass/core/.sass-cache
 /app/Console/Commands/Core/Developer
