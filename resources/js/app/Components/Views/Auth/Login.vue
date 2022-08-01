@@ -15,6 +15,10 @@
                             <div class="form-group col-12 px-0">
                                 <h6 class="text-center mb-0">{{ $t('hi_there') }}</h6>
                                 <label class="text-center d-block">{{ $t('log_in_to_your_dashboard') }}</label>
+                                <hr>
+                                <p><b>Email:</b> admin@demo.com</p>
+                                <p><b>Password:</b> 123456</p>
+                                <hr>
                             </div>
                         </div>
                         <div class="form-row">
